@@ -1,0 +1,16 @@
+import express from 'express'
+import { changePassword, editProfile, getProfile, userLogin, userSignup } from '../controllers/user.controller.js';
+
+const router = express.Router();
+
+router.post("/signup",userSignup); //user signup api
+
+router.post("/login",userLogin); //user login api
+
+router.get('/profile',getProfile) //api to access details of user to every single page 
+
+router.put('/editProfile/:id',editProfile) // api for edit the user name
+
+router.put('/changePassword/:id',changePassword) // api for changing the password of the user
+
+export default router;
