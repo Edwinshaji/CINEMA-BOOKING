@@ -44,11 +44,11 @@ export const deleteMovie = async (req, res) => {
             return res.status(404).json({ message: "Movie not found" })
         }
         // making the path of the image with the posterUrl
-        const posterPath = path.join('C:/Users/Lenovo/Desktop/PROJECTS/CINEMA BOOKING/backend/public/poster-images' , movie.posterUrl);
+        const posterPath = path.join('C:/Users/Lenovo/Desktop/PROJECTS/CINEMA BOOKING/backend/public/poster-images', movie.posterUrl);
         // using fs unlink the item of the given path
         fs.unlink(posterPath, (err) => {
             if (err) {
-                console.log("Failed to delete the image form the server",err)
+                console.log("Failed to delete the image form the server", err)
             } else {
                 console.log("Image deleted ", posterPath);
             }
@@ -70,5 +70,16 @@ export const getAllMovies = async (req, res) => {
     } catch (error) {
         console.log(error)
         return res.status(500).json({ status: false, message: "Server Error" });
+    }
+}
+
+export const getSingleMovie = async (req, res) => {
+    let movieId = req.params.id;
+
+    try {
+        const movie = await Movie.findById(movieId);
+        return res.status(200).json(movie);
+    } catch (error) {
+        return res.status(500).json({ status: false, message: "Server Error" })
     }
 }

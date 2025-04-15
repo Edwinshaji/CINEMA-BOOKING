@@ -1,7 +1,7 @@
 import express from 'express'
 import multer from "multer";
 import path from 'path'
-import { addMovie, deleteMovie, editMovie, getAllMovies } from '../controllers/movie.controller.js';
+import { addMovie, deleteMovie, editMovie, getAllMovies, getSingleMovie } from '../controllers/movie.controller.js';
 
 const router = express.Router();
 
@@ -25,5 +25,7 @@ router.put('/editMovie/:id',editMovie); // api for editing an existing movie
 router.delete('/deleteMovie/:id',deleteMovie); // api for deleting a movie
 
 router.get('/getAllMovies',getAllMovies); // api for getting all movies from the databse
+
+router.get('/getSingleMovie/:id',getSingleMovie); // api for getting a single movie details with the movie ID
 
 export default router;

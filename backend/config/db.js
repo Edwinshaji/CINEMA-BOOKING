@@ -8,5 +8,4 @@ export const connectDB = async ()=>{
         console.error(`Error : $(error.message)`)
         process.exit(1) // 1 code means exit with faliure ,  0 means success 
     }
-
 }

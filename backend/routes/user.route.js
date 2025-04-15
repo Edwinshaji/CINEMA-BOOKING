@@ -1,5 +1,6 @@
 import express from 'express'
 import { changePassword, editProfile, getProfile, userLogin, userSignup } from '../controllers/user.controller.js';
+import { getAllMovies, getSingleMovie } from '../controllers/movie.controller.js';
 
 const router = express.Router();
 
@@ -12,5 +13,11 @@ router.get('/profile',getProfile) //api to access details of user to every singl
 router.put('/editProfile/:id',editProfile) // api for edit the user name
 
 router.put('/changePassword/:id',changePassword) // api for changing the password of the user
+
+router.get('/getSingleMovie/:id',getSingleMovie); // api for getting a single movie details with the movie ID
+
+router.get('/getAllMovies',getAllMovies); // api for getting all movies from the databse
+
+
 
 export default router;
