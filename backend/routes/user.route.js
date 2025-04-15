@@ -1,6 +1,7 @@
 import express from 'express'
 import { changePassword, editProfile, getProfile, userLogin, userSignup } from '../controllers/user.controller.js';
 import { getAllMovies, getSingleMovie } from '../controllers/movie.controller.js';
+import { bookTicket, cancelTicket } from '../controllers/booking.controller.js';
 
 const router = express.Router();
 
@@ -18,6 +19,8 @@ router.get('/getSingleMovie/:id',getSingleMovie); // api for getting a single mo
 
 router.get('/getAllMovies',getAllMovies); // api for getting all movies from the databse
 
+router.post('/bookTicket',bookTicket) // api for booking the ticket
 
+router.put('/cancelTicket/:userId/:bookingId',cancelTicket) // api for cancelling the ticket
 
 export default router;

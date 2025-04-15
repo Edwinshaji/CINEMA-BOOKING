@@ -27,8 +27,9 @@ export const editMovie = async (req, res) => {
 
     try {
         // finding and updating the movie  
-        await Movie.findByIdAndUpdate(movieId, req.body)
-        return res.status(200).json({ status: true, message: "Movie updated successfuly" })
+        await Movie.findByIdAndUpdate(movieId, req.body).then(()=>{
+            return res.status(200).json({ status: true, message: "Movie updated successfuly" })
+        })
     } catch (error) {
         return res.status(500).json({ status: false, message: "Server Error" })
     }
@@ -55,8 +56,12 @@ export const deleteMovie = async (req, res) => {
         })
 
         // deleting the movie form the database
-        await Movie.findByIdAndDelete(movieId);
-        return res.status(200).json({ status: true, message: "Movie deleted successfuly" })
+        let deletedMovie = await Movie.findByIdAndDelete(movieId);
+        if(deletedMovie){
+            return res.status(200).json({ status: true, message: "Movie deleted successfuly" })
+        }else{
+            return res.status(400).json({ status: true, message: "Movie doesn't deleted" })
+        }
     } catch (error) {
         console.log(error)
         return res.status(500).json({ status: false, message: "Server Error" })
@@ -65,6 +70,7 @@ export const deleteMovie = async (req, res) => {
 
 export const getAllMovies = async (req, res) => {
     try {
+        // fetching all movies from the database
         let movies = await Movie.find();
         return res.status(200).json(movies)
     } catch (error) {
@@ -76,9 +82,42 @@ export const getAllMovies = async (req, res) => {
 export const getSingleMovie = async (req, res) => {
     let movieId = req.params.id;
 
+    // fetching the details of a particular movie by the movie id
     try {
         const movie = await Movie.findById(movieId);
         return res.status(200).json(movie);
+    } catch (error) {
+        return res.status(500).json({ status: false, message: "Server Error" })
+    }
+}
+
+export const deactivateMovie = async(req,res)=>{
+    try {
+        // making the movie deactivate by changing the isActive to false
+        let movieId = req.params.id;
+        let deactive = await Movie.findByIdAndUpdate(movieId,{isActive:false})
+
+        if(deactive){
+            return res.status(200).json({message:"Movie Deactivated"})
+        }else{
+            return res.status(400).json({message:"Movie Deactivation failed"})
+        }
+    } catch (error) {
+        return res.status(500).json({ status: false, message: "Server Error" })
+    }
+}
+
+export const activateMovie = async(req,res)=>{
+    try {
+        // making the movie activate by changing the isActive to true
+        let movieId = req.params.id;
+        let deactive = await Movie.findByIdAndUpdate(movieId,{isActive:true})
+
+        if(deactive){
+            return res.status(200).json({message:"Movie Activated"})
+        }else{
+            return res.status(400).json({message:"Movie Activation failed"})
+        }
     } catch (error) {
         return res.status(500).json({ status: false, message: "Server Error" })
     }
