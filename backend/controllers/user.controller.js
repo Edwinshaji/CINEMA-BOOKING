@@ -2,12 +2,16 @@ import User from '../models/user.model.js';
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
 
-
 export const userSignup = async (req, res) => {
     let { name, email, password } = req.body;
     let hashedPassword = await bcrypt.hash(password, 10);
 
     try {
+        // checking is a user already exists
+        const existUser = await User.findOne({ email })
+        if (existUser) {
+            return res.status(400).json({ status: false, message: "User already exists with this email" });
+        }
         // checking if name was entered
         if (!name) {
             return res.status(400).json({ status: false, message: "Name is Required!" })
@@ -16,17 +20,14 @@ export const userSignup = async (req, res) => {
         if (!password || password.length < 6) {
             return res.status(400).json({ status: false, message: "Password should be at least 6 characters long" })
         }
-        // checking is a user already exists
-        const existUser = await User.findOne({ email })
-        if (existUser) {
-            return res.status(400).json({ status: false, message: "User already exists with this email" });
-        }
 
         //if user doesnt exist create a new user
         const newUser = new User({ name, email, password: hashedPassword });
         await newUser.save()
 
-        return res.status(201).json({ status: true, message: "Created a new user", user: newUser })
+        if (newUser) {
+            return res.status(201).json({ status: true, message: "Created a new user", user: newUser })
+        }
 
     } catch (error) {
         res.status(500).json({ message: "Server error", error: error })
@@ -45,12 +46,16 @@ export const userLogin = async (req, res) => {
             // if user exist compare the password submitted with the password in the databse 
             if (await bcrypt.compare(password, user.password)) {
                 // if user enter credentials is true create a cookie for the user
-                jwt.sign({ email: user.email, id: user._id, name: user.name }, process.env.JWT_SECRET, {}, (err, token) => {
-                    if (err) {
-                        throw err
-                    }
-                    return res.cookie('token', token).json(user)
+                const token = jwt.sign({ email: user.email, id: user._id, name: user.name, role: user.role }, process.env.JWT_SECRET, { expiresIn: '7d' });
+
+                res.cookie('token', token, {
+                    httpOnly: true,
+                    secure: false,
+                    sameSite: 'strict',
+                    maxAge: 7 * 24 * 60 * 60 * 1000
                 })
+                return res.status(200).json({ user: { id: user._id, email: user.email, role: user.role, name: user.name } });
+
             } else {
                 return res.status(400).json({ status: false, message: "Incorrect Password" })
             }
@@ -62,17 +67,22 @@ export const userLogin = async (req, res) => {
     }
 }
 
-export const getProfile = () => {
-    const { token } = req.cookies
+export const getUser = async (req, res) => {
+    const token = req.cookies.token;
+    if (!token) return res.status(401).json({ message: 'Unauthorized' });
 
-    if (token) {
-        jwt.verify(token, process.env.JWT_SECRET, {}, (err, user) => {
-            if (err) throw err
-            return res.json(user)
-        })
-    } else {
-        return res.json(null)
+    try {
+        const decoded = jwt.verify(token, process.env.JWT_SECRET);
+        const user = await User.findById(decoded.id).select('-password');
+        return res.status(200).json({ user });
+    } catch (err) {
+        return res.status(401).json({ message: 'Unauthorized' });
     }
+}
+
+export const userLogout = async (req, res) => {
+    res.clearCookie('token')
+    return res.status(200).json({ message: 'Logged out' });
 }
 
 export const editProfile = async (req, res) => {
