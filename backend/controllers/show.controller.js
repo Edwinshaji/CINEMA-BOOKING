@@ -2,21 +2,22 @@ import Show from "../models/show.model.js";
 
 export const addShows = async (req, res) => {
     try {
-        const { movieId, dates, showTimes } = req.body;
+        const { movieId, dates, times } = req.body;
 
         const showsToInsert = [];
         
         // looping the dates array and inside that loop the showTime array by the combination of this we can create the multiple shows
         dates.forEach((date) => {
-            showTimes.forEach((time) => {
+            times.forEach((time) => {
                 showsToInsert.push({
                     movie: movieId,
-                    date: new Date(date).toLocaleDateString("en-GB"),
+                    date: new Date(date).toISOString().split('T')[0],
                     time: time
                 })
             })
         })
 
+        console.log(showsToInsert)
         // insert the array of objects created into the database
         const insertedShows = await Show.insertMany(showsToInsert)
 
@@ -55,5 +56,15 @@ export const deleteShow = async (req, res) => {
         }
     } catch (error) {
         return res.status(500).json({ status: false, message: "Server Error" })
+    }
+}
+
+export const getShowsSingleMovie = async (req,res)=>{
+    try {
+        const movieId=req.params.id;
+        const shows = await Show.find({movie:movieId})
+        return res.status(200).json(shows)
+    } catch (error) {
+        return res.status(500).json({status:false,message:"Server Error"})
     }
 }

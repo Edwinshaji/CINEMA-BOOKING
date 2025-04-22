@@ -51,4 +51,9 @@
   .add-movie-form button:hover {
     background-color: #2a3b73;
   }
+
+  .poster-image{
+    width: 100px;
+    height: 60px;
+  }
   

@@ -4,7 +4,6 @@ import path from 'path'
 
 export const addMovie = async (req, res) => {
     let { title, description, duration, language } = req.body;
-
     try {
         // checking if all the fields are submitted by the user 
         if (!title || !description || !duration || !language) {
@@ -24,12 +23,25 @@ export const addMovie = async (req, res) => {
 
 export const editMovie = async (req, res) => {
     let movieId = req.params.id; // accessing the movie id
+    let { title, description, duration, language } = req.body;
+    let newPosterUrl = req.file.filename;
 
     try {
-        // finding and updating the movie  
-        await Movie.findByIdAndUpdate(movieId, req.body).then(()=>{
-            return res.status(200).json({ status: true, message: "Movie updated successfuly" })
+        let oldMovie = await Movie.findById(movieId)
+        const posterPath = path.join('C:/Users/Lenovo/Desktop/PROJECTS/CINEMA BOOKING/backend/public/poster-images', oldMovie.posterUrl);
+
+        fs.unlink(posterPath, (err) => {
+            if (err) {
+                console.log("Failed to delete the image form the server", err)
+            } else {
+                console.log("Image deleted ", posterPath);
+            }
         })
+        // finding and updating the movie  
+        await Movie.findByIdAndUpdate(movieId, { title, description, duration, language, posterUrl:newPosterUrl })
+            .then(() => {
+                return res.status(200).json({ status: true, message: "Movie updated successfuly" })
+            })
     } catch (error) {
         return res.status(500).json({ status: false, message: "Server Error" })
     }
@@ -57,9 +69,9 @@ export const deleteMovie = async (req, res) => {
 
         // deleting the movie form the database
         let deletedMovie = await Movie.findByIdAndDelete(movieId);
-        if(deletedMovie){
+        if (deletedMovie) {
             return res.status(200).json({ status: true, message: "Movie deleted successfuly" })
-        }else{
+        } else {
             return res.status(400).json({ status: true, message: "Movie doesn't deleted" })
         }
     } catch (error) {
@@ -91,33 +103,42 @@ export const getSingleMovie = async (req, res) => {
     }
 }
 
-export const deactivateMovie = async(req,res)=>{
+export const deactivateMovie = async (req, res) => {
     try {
         // making the movie deactivate by changing the isActive to false
         let movieId = req.params.id;
-        let deactive = await Movie.findByIdAndUpdate(movieId,{isActive:false})
+        let deactive = await Movie.findByIdAndUpdate(movieId, { isActive: false })
 
-        if(deactive){
-            return res.status(200).json({message:"Movie Deactivated"})
-        }else{
-            return res.status(400).json({message:"Movie Deactivation failed"})
+        if (deactive) {
+            return res.status(200).json({ message: "Movie Deactivated" })
+        } else {
+            return res.status(400).json({ message: "Movie Deactivation failed" })
         }
     } catch (error) {
         return res.status(500).json({ status: false, message: "Server Error" })
     }
 }
 
-export const activateMovie = async(req,res)=>{
+export const activateMovie = async (req, res) => {
     try {
         // making the movie activate by changing the isActive to true
         let movieId = req.params.id;
-        let deactive = await Movie.findByIdAndUpdate(movieId,{isActive:true})
+        let deactive = await Movie.findByIdAndUpdate(movieId, { isActive: true })
 
-        if(deactive){
-            return res.status(200).json({message:"Movie Activated"})
-        }else{
-            return res.status(400).json({message:"Movie Activation failed"})
+        if (deactive) {
+            return res.status(200).json({ message: "Movie Activated" })
+        } else {
+            return res.status(400).json({ message: "Movie Activation failed" })
         }
+    } catch (error) {
+        return res.status(500).json({ status: false, message: "Server Error" })
+    }
+}
+
+export const getActiveMovies = async(req,res)=>{
+    try {
+        const movies = await Movie.find({isActive:true})
+        return res.status(200).json(movies)
     } catch (error) {
         return res.status(500).json({ status: false, message: "Server Error" })
     }

@@ -22,6 +22,7 @@ import AdminShows from './pages/admin/AdminShows'
 import AdminRoute from './routes/AdminRoute'
 import ProtectedRoute from './routes/ProtectedRoute'
 import AddMovie from './components/admin/addMovie/AddMovie'
+import AddShow from './components/admin/addShow/AddShow'
 
 function App() {
   const location = useLocation();
@@ -55,6 +56,7 @@ function App() {
         <Route path="/admin/bookings" element={<AdminRoute><AdminBookings /></AdminRoute>} />
         <Route path="/admin/shows" element={<AdminRoute><AdminShows /></AdminRoute>} />
         <Route path="/admin/addMovie" element={<AdminRoute><AddMovie /></AdminRoute>} />
+        <Route path='/admin/addShow' element={<AdminRoute><AddShow /></AdminRoute>}/>
       </Routes>
     </>
   )
