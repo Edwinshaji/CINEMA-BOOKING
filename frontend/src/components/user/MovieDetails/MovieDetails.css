@@ -1,0 +1,88 @@
+.movie-details-page {
+  padding: 2rem;
+  display: flex;
+  flex-direction: row;
+}
+
+.poster{
+  width: 55%;
+}
+.poster img {
+  width: 100%;
+  height: auto;
+}
+
+.details {
+  width: 40%;
+  padding: 2rem;
+  margin-left: 5rem;
+}
+
+.details h1 {
+  font-size: 3.5rem;
+  margin-bottom: 1rem;
+  letter-spacing: 1px;
+}
+
+.meta {
+  display: flex;
+  gap: 1.5rem;
+  font-size: 1.5rem;
+  margin-bottom: 1.5rem;
+  color: #0033ff;
+}
+
+.description {
+  font-size: 1.4rem;
+  line-height: 1.7;
+  color: #000000;
+  margin-bottom: 2rem;
+}
+
+.book-button-details {
+  padding: 0.9rem 2rem;
+  font-size: 1.1rem;
+  font-weight: bold;
+  background: #ff4081;
+  color: white;
+  border: none;
+  border-radius: 5rem;
+  cursor: pointer;
+  transition: background 0.3s ease;
+  box-shadow: 0 8px 16px rgba(255, 64, 129, 0.3);
+}
+
+.book-button-details:hover {
+  background: #f50057;
+}
+
+/* Mobile responsive */
+@media screen and (max-width: 768px) {
+
+  .movie-details-page {
+    padding: 2rem;
+    display: flex;
+    flex-direction: column;
+  }
+  .poster{
+    width: 100%;
+  }
+  .details {
+    width: 100%;
+    margin-left: 0;
+  }
+
+  .details h1 {
+    font-size: 2rem;
+  }
+
+  .meta {
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  .book-button-details {
+    width: 90%;
+    font-size: 1rem;
+  }
+}

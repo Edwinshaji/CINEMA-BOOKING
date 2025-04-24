@@ -16,8 +16,6 @@ export const addShows = async (req, res) => {
                 })
             })
         })
-
-        console.log(showsToInsert)
         // insert the array of objects created into the database
         const insertedShows = await Show.insertMany(showsToInsert)
 
@@ -64,6 +62,20 @@ export const getShowsSingleMovie = async (req,res)=>{
         const movieId=req.params.id;
         const shows = await Show.find({movie:movieId})
         return res.status(200).json(shows)
+    } catch (error) {
+        return res.status(500).json({status:false,message:"Server Error"})
+    }
+}
+
+export const getShowsByDate = async(req,res)=>{
+    try {
+        const date = req.body.date;
+        let shows = await Show.find({date:date})
+        if(shows){
+           return res.status(200).json(shows)
+        }else{
+            return res.status(404).json({status:false,message:"shows not found"})
+        }
     } catch (error) {
         return res.status(500).json({status:false,message:"Server Error"})
     }

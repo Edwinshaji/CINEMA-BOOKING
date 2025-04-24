@@ -1,6 +1,6 @@
 import express from 'express'
 import { changePassword, editProfile, getUser, userLogin, userLogout, userSignup } from '../controllers/user.controller.js';
-import { getAllMovies, getSingleMovie } from '../controllers/movie.controller.js';
+import { getActiveMovies, getAllMovies, getSingleMovie } from '../controllers/movie.controller.js';
 import { bookTicket, cancelTicket, getTickets } from '../controllers/booking.controller.js';
 
 const router = express.Router();
@@ -29,6 +29,8 @@ router.get('/logout',userLogout)
 router.put('/editProfile/:id',editProfile) // api for edit the user name
 
 router.put('/changePassword/:id',changePassword) // api for changing the password of the user
+
+router.get('/getActiveMovies',getActiveMovies); //api to get only active movies
 
 router.get('/getSingleMovie/:id',getSingleMovie); // api for getting a single movie details with the movie ID
 

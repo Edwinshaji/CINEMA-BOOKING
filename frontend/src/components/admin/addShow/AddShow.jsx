@@ -26,15 +26,23 @@ const AddShow = () => {
             })
     }, [])
 
-    const handleDateChange = (date) => {
-        const exists = selectedDates.find(d => d.toDateString() === date.toDateString());
-        if (exists) {
-            setSelectedDates(selectedDates.filter(d => d.toDateString() !== date.toDateString()));
-        } else {
-            setSelectedDates([...selectedDates, date]);
-        }
+
+    const formatDate = (date) => {
+        const year = date.getFullYear();
+        const month = String(date.getMonth() + 1).padStart(2, '0');
+        const day = String(date.getDate()).padStart(2, '0');
+        return `${year}-${month}-${day}`;
     };
 
+    const handleDateChange = (date) => {
+        const formatted = formatDate(date);
+
+        if (selectedDates.includes(formatted)) {
+            setSelectedDates(selectedDates.filter(d => d !== formatted));
+        } else {
+            setSelectedDates([...selectedDates, formatted]);
+        }
+    };
     const addShowTime = () => {
         if (showTimeInput && !showTimes.includes(showTimeInput)) {
             setShowTimes([...showTimes, showTimeInput]);
@@ -51,10 +59,11 @@ const AddShow = () => {
             alert('Please fill in all fields.');
             return;
         }
+        console.log(selectedDates)
 
         const data = {
             movieId: selectedMovie.value,
-            dates: selectedDates.map(d => d.toISOString().split('T')[0]),
+            dates: selectedDates.map(d => new Date(d).toISOString().split('T')[0]),
             times: showTimes,
         };
 
@@ -89,14 +98,23 @@ const AddShow = () => {
                 inline
                 selected={null}
                 onChange={handleDateChange}
-                highlightDates={selectedDates}
                 minDate={new Date()}
-                dayClassName={date =>
-                    selectedDates.find(d => d.toDateString() === date.toDateString())
+                highlightDates={selectedDates.map(d => new Date(d))}
+                dayClassName={date => {
+                    const formatted = formatDate(date);
+                    return selectedDates.includes(formatted)
                         ? 'highlighted-day'
-                        : undefined
-                }
+                        : undefined;
+                }}
             />
+
+            {/* Debugging: show selected */}
+            <div style={{ marginTop: '1rem' }}>
+                <strong>Selected Dates:</strong>
+                <ul>
+                    {selectedDates.map((d, idx) => <li key={idx}>{d}</li>)}
+                </ul>
+            </div>
 
             <label>Add Show Time:</label>
             <div className="time-row">

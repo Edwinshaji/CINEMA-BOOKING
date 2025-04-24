@@ -1,3 +1,5 @@
+import { stat } from "fs";
+import mongoose from "mongoose";
 import Booking from "../models/booking.model.js";
 
 export const bookTicket = async (req, res) => {
@@ -34,27 +36,91 @@ export const cancelTicket = async (req, res) => {
                     status: "cancelled"
                 }
             })
-            if(updated){
-                return res.status(200).json({message:"Ticket cancelled"})
-            }else{
-                return res.status(404).json({status:false,message:"Ticket cancellation failed"})
-            }
+        if (updated) {
+            return res.status(200).json({ message: "Ticket cancelled" })
+        } else {
+            return res.status(404).json({ status: false, message: "Ticket cancellation failed" })
+        }
     } catch (error) {
         return res.status(500).json({ status: false, message: "Server Error" })
     }
 }
 
-export const getTickets = async(req,res)=>{
+export const getTickets = async (req, res) => {
     try {
         let userId = req.params.userId;
-        let tickets = await Booking.find({user:userId});
-        
-        if(tickets){
+        let tickets = await Booking.find({ user: userId });
+
+        if (tickets) {
             return res.status(200).json(tickets)
-        }else{
-            return res.status(404).json({status:false,message:"Tickets not found"})
+        } else {
+            return res.status(404).json({ status: false, message: "Tickets not found" })
         }
     } catch (error) {
-        return res.status(500).json({status:false,message:"Server Error"})
+        return res.status(500).json({ status: false, message: "Server Error" })
+    }
+}
+
+export const getBookingsShow = async (req, res) => {
+    try {
+        let showId = req.params.id;
+          
+        let bookings = await Booking.aggregate([
+            {
+                $match:{
+                    show:new mongoose.Types.ObjectId(showId)
+                }
+            },
+            {
+                $lookup: {
+                    from: "users",
+                    localField: "user",
+                    foreignField: "_id",
+                    as: "user"
+                }
+            },
+            {
+                $unwind: "$user"
+            },
+            {
+                $lookup: {
+                    from: "movies",
+                    localField: "movie",
+                    foreignField: "_id",
+                    as: "movie"
+                }
+            },
+            {
+                $unwind: "$movie"
+            },
+            {
+                $lookup: {
+                    from: "shows",
+                    localField: "show",
+                    foreignField: "_id",
+                    as: "show"
+                }
+            },
+            {
+                $unwind: "$show"
+            },
+            {
+                $project: {
+                    _id: 0,
+                    bookingDate: 1,
+                    selectedSeats: 1,
+                    totalAmount:1,
+                    userName: "$user.name",
+                    movieTitle: "$movie.title"
+                }
+            }
+        ])
+        if (bookings) {
+            return res.status(200).json(bookings)
+        } else {
+            return res.status(404).json({ message: "Bookings not found" })
+        }
+    } catch (error) {
+        return res.status(500).json({ status: false, message: "Server Error" })
     }
 }

@@ -2,7 +2,8 @@ import express from 'express'
 import multer from "multer";
 import path from 'path'
 import { activateMovie, addMovie, deactivateMovie,  deleteMovie, editMovie, getActiveMovies, getAllMovies, getSingleMovie } from '../controllers/movie.controller.js';
-import { addShows, deleteShow, editShow, getShowsSingleMovie } from '../controllers/show.controller.js';
+import { addShows, deleteShow, editShow, getShowsByDate, getShowsSingleMovie } from '../controllers/show.controller.js';
+import { getBookingsShow } from '../controllers/booking.controller.js';
 
 const router = express.Router();
 
@@ -42,5 +43,9 @@ router.delete('/deleteShow/:id',deleteShow); // api for deleting the show
 router.put('/editShow/:id',editShow); // api for editing the show 
 
 router.get('/getShowsSingleMovie/:id',getShowsSingleMovie) // api for getting the shows of a particular movie by checking the movie id
+
+router.post('/getShowsByDate',getShowsByDate) // api for getting shows by the date
+
+router.get('/getBookingsShow/:id',getBookingsShow)
 
 export default router;

@@ -1,10 +1,9 @@
 import React, { useEffect, useState } from 'react'
 import './css/AdminMovies.css'
-import { Link, useLocation, useNavigate } from 'react-router-dom'
+import { Link,  useNavigate } from 'react-router-dom'
 import axios from 'axios';
 
 function AdminMovies() {
-  const location = useLocation();
   const navigate = useNavigate();
   const [movies, setMovies] = useState([]);
 
@@ -19,7 +18,7 @@ function AdminMovies() {
   }, []);
 
   const editHandler = async (values) => {
-    navigate('/admin/addMovie',{state:{values}})
+    navigate('/admin/addMovie', { state: { values } })
   }
 
   const removeHandler = async (id) => {
@@ -44,19 +43,21 @@ function AdminMovies() {
       })
   }
 
-  const deleteHandler = async(id)=>{
-    await axios.delete('http://localhost:5000/api/admin/deleteMovie/'+id)
-    .then((response)=>{
-      alert(response.data.message)
-      window.location.reload();
-    })
-    .catch((err)=>{
-      console.log(err)
-    })
+  const deleteHandler = async (id) => {
+    await axios.delete('http://localhost:5000/api/admin/deleteMovie/' + id)
+      .then((response) => {
+        alert(response.data.message)
+        window.location.reload();
+      })
+      .catch((err) => {
+        console.log(err)
+      })
   }
 
   return (
     <div className="movies-container">
+      <h1 className="page-title float-title">Movies</h1>
+
       <div className="movies-header">
         <Link to='/admin/addMovie'><button className="add-button">Add Movie</button></Link>
       </div>
@@ -74,7 +75,7 @@ function AdminMovies() {
         </thead>
         <tbody>
           {
-            movies.map((movie,id) => {
+            movies.map((movie, id) => {
               if (movie.isActive) {
                 return (
                   <tr key={id}>
@@ -105,7 +106,7 @@ function AdminMovies() {
         </thead>
         <tbody>
           {
-            movies.map((movie,id) => {
+            movies.map((movie, id) => {
               if (movie.isActive === false) {
                 return (
                   <tr key={id}>

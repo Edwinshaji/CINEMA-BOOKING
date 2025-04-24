@@ -23,6 +23,8 @@ import AdminRoute from './routes/AdminRoute'
 import ProtectedRoute from './routes/ProtectedRoute'
 import AddMovie from './components/admin/addMovie/AddMovie'
 import AddShow from './components/admin/addShow/AddShow'
+import ListBookings from './components/admin/listBookings/ListBookings'
+import MovieDetails from './components/user/MovieDetails/MovieDetails'
 
 function App() {
   const location = useLocation();
@@ -49,6 +51,7 @@ function App() {
         <Route path="/movies" element={<ProtectedRoute><Movies /></ProtectedRoute>} />
         <Route path="/bookings" element={<ProtectedRoute><Bookings /></ProtectedRoute>} />
         <Route path="/account" element={<ProtectedRoute><Account /></ProtectedRoute>} />
+        <Route path='/movieDetails' element={<ProtectedRoute><MovieDetails /></ProtectedRoute>}/>
 
         {/*Admin Routes */}
         <Route path="/admin/dashboard" element={<AdminRoute><AdminDashboard /></AdminRoute>} />
@@ -57,6 +60,7 @@ function App() {
         <Route path="/admin/shows" element={<AdminRoute><AdminShows /></AdminRoute>} />
         <Route path="/admin/addMovie" element={<AdminRoute><AddMovie /></AdminRoute>} />
         <Route path='/admin/addShow' element={<AdminRoute><AddShow /></AdminRoute>}/>
+        <Route path='/admin/listBookings' element={<AdminRoute><ListBookings /></AdminRoute>}/>
       </Routes>
     </>
   )

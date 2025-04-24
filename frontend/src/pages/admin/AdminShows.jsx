@@ -41,9 +41,11 @@ const AdminShows = () => {
 
   return (
     <div className="show-page">
+      <h1 className="page-title float-title">Shows</h1>
+
       <Link to='/admin/addShow'>
         <button className="add-show-button">
-          + Add Show
+          Add Show
         </button>
       </Link>
 

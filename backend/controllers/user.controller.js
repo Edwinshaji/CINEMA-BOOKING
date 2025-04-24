@@ -37,7 +37,6 @@ export const userSignup = async (req, res) => {
 
 export const userLogin = async (req, res) => {
     let { email, password } = req.body;
-
     try {
         // finding user with the email
         let user = await User.findOne({ email: email })

@@ -62,7 +62,7 @@
   
   /* Date Picker Highlighted Day */
   .highlighted-day {
-    background-color: #3498db !important;
+    background-color: #10b981 !important; /* green highlight */
     color: white !important;
     border-radius: 50% !important;
   }
