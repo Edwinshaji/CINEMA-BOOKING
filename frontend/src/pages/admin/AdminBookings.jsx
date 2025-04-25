@@ -48,7 +48,7 @@ const AdminBookings = () => {
         
         {movies.map((movie) => (
           <div key={movie._id} className="movie-item">
-            <div className="movie-title" onClick={() => toggleMovie(movie._id)}>
+            <div className="booking-movie-title" onClick={() => toggleMovie(movie._id)}>
               🎬 {movie.title}
             </div>
 
@@ -59,7 +59,7 @@ const AdminBookings = () => {
                     <tr>
                       <th>Date</th>
                       <th>Time</th>
-                      <th>Available Seats</th>
+                      <th>Booked Seats</th>
                       <th>Actions</th>
                     </tr>
                   </thead>
@@ -71,7 +71,7 @@ const AdminBookings = () => {
                           <tr key={show.id}>
                             <td>{show.date.split('T')[0]}</td>
                             <td>{show.time}</td>
-                            <td>{show.seats}</td>
+                            <td>{show.bookedSeats.length}</td>
                             <td>
                               <button className="view-booking-button" onClick={() => handleViewBooking(show._id)}>View Bookings</button>
                             </td>

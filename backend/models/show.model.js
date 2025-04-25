@@ -22,7 +22,7 @@ const ShowSchema = new mongoose.Schema({
         type:Number,
         default:100
     },
-    availableSeats: {
+    bookedSeats: {
         type: Array, // you can later predefine this based on theatre
         default: [],
     },

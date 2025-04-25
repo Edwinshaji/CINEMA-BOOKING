@@ -1,6 +1,7 @@
 import { stat } from "fs";
 import mongoose from "mongoose";
 import Booking from "../models/booking.model.js";
+import Show from "../models/show.model.js";
 
 export const bookTicket = async (req, res) => {
     try {
@@ -15,7 +16,10 @@ export const bookTicket = async (req, res) => {
         await newBooking.save()
 
         if (newBooking) {
-            return res.status(201).json({ message: "Ticket Booked", Booking: newBooking })
+            const isShowUpdated =  await Show.updateOne({_id:showId},{ $addToSet: { bookedSeats: { $each: selectedSeats } } })
+            if(isShowUpdated){
+                return res.status(201).json({ message: "Ticket Booked", Booking: newBooking })
+            }
         } else {
             return res.status(400).json({ message: "Ticket Booking failed" })
         }

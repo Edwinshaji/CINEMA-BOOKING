@@ -53,7 +53,7 @@ const AdminShows = () => {
       <div className="movie-list">
         {movies.map((movie) => (
           <div key={movie._id} className="movie-item">
-            <div className="movie-title" onClick={() => toggleMovie(movie._id)}>
+            <div className="shows-movie-title" onClick={() => toggleMovie(movie._id)}>
               🎬 {movie.title}
             </div>
 
@@ -65,6 +65,7 @@ const AdminShows = () => {
                       <th>Date</th>
                       <th>Time</th>
                       <th>Available Seats</th>
+                      <th>Booked Seats</th>
                       <th>Actions</th>
                     </tr>
                   </thead>
@@ -76,7 +77,8 @@ const AdminShows = () => {
                           <tr key={show.id}>
                             <td>{show.date.split('T')[0]}</td>
                             <td>{show.time}</td>
-                            <td>{show.seats}</td>
+                            <td>{100 - show.bookedSeats.length}</td>
+                            <td>{show.bookedSeats.length}</td>
                             <td>
                               <button className="delete-button" onClick={() => handleDelete(show._id)}>Delete</button>
                             </td>

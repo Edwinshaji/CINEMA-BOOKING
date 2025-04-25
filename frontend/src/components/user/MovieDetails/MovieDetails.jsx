@@ -1,18 +1,10 @@
 import React, { useEffect, useState } from "react";
 import "./MovieDetails.css";
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import axios from "axios";
 
-const movie = {
-  title: "The Lost Kingdom",
-  duration: "2h 15m",
-  language: "English",
-  description:
-    "In a world where ancient secrets awaken, one hero embarks on a journey to reclaim the throne of a forgotten realm. With breathtaking visuals and a heart-pounding story, 'The Lost Kingdom' is an epic tale of courage, betrayal, and destiny.",
-  poster: "https://via.placeholder.com/1200x600?text=The+Lost+Kingdom+Poster",
-};
-
 const MovieDetails = () => {
+  const navigate = useNavigate();
   const location = useLocation();
   const [movieId,setMovieId] = useState();
   const [movie,setMovie] = useState({});
@@ -30,6 +22,10 @@ const MovieDetails = () => {
       setMovie(response.data);
     })
   })
+
+  const handleBookTicket = (movieId)=>{
+    navigate('/bookShow',{state:{movieId}})
+  }
   return (
     <div className="movie-details-page">
       <div className="poster">
@@ -45,7 +41,7 @@ const MovieDetails = () => {
         <div>
         <p className="description">{movie.description}</p>
         </div>
-        <button className="book-button-details">🎟 Book Ticket</button>
+        <button className="book-button-details" onClick={()=>handleBookTicket(movie._id)}>🎟 Book Ticket</button>
       </div>
     </div>
   );

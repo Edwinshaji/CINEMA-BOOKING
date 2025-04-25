@@ -63,6 +63,10 @@
     text-align: left;
 }
 
+.movies-table td{
+    max-width: 20rem;
+}
+
 .movies-table th {
     background-color: #f4f4f4;
 }

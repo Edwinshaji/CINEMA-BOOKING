@@ -18,6 +18,10 @@ const Movies = () => {
     navigate('/movieDetails', { state: { movieId } })
   }
 
+  const handleBookShow = (movieId) => {
+    navigate('/bookShow', { state: { movieId } })
+  }
+
   return (
     <div className="movies-page">
       <div className="movies-banner">
@@ -31,7 +35,7 @@ const Movies = () => {
             <h2>{movie.title}</h2>
             <p>Language: {movie.language}</p>
             <button className="view-movie-btn" onClick={(() => { handleViewMovie(movie._id) })}>View Movie</button>
-            <button className="book-movie-btn">Book Tickets</button>
+            <button className="book-movie-btn" onClick={(() => { handleBookShow(movie._id) })}>Book Tickets</button>
           </div>
         ))}
       </div>
