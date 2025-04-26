@@ -16,8 +16,8 @@ export const bookTicket = async (req, res) => {
         await newBooking.save()
 
         if (newBooking) {
-            const isShowUpdated =  await Show.updateOne({_id:showId},{ $addToSet: { bookedSeats: { $each: selectedSeats } } })
-            if(isShowUpdated){
+            const isShowUpdated = await Show.updateOne({ _id: showId }, { $addToSet: { bookedSeats: { $each: selectedSeats } } })
+            if (isShowUpdated) {
                 return res.status(201).json({ message: "Ticket Booked", Booking: newBooking })
             }
         } else {
@@ -32,15 +32,26 @@ export const bookTicket = async (req, res) => {
 export const cancelTicket = async (req, res) => {
     try {
         const { userId, bookingId } = req.params;
+        const booking = req.body;
+        
         // check the document with matching of userId and bookingId and update the status to cancelled
+        const showUpdated = await Show.findByIdAndUpdate(
+        {_id:booking.booking.show._id},
+        {
+            $pull:{
+                bookedSeats:{
+                    $in:booking.booking.selectedSeats
+                }
+            }
+        })
         const updated = await Booking.findOneAndUpdate(
             { user: userId, _id: bookingId },
             {
                 $set: {
-                    status: "cancelled"
+                    status: "canceled"
                 }
             })
-        if (updated) {
+        if (updated && showUpdated) {
             return res.status(200).json({ message: "Ticket cancelled" })
         } else {
             return res.status(404).json({ status: false, message: "Ticket cancellation failed" })
@@ -53,10 +64,12 @@ export const cancelTicket = async (req, res) => {
 export const getTickets = async (req, res) => {
     try {
         let userId = req.params.userId;
-        let tickets = await Booking.find({ user: userId });
+        const bookings = await Booking.find({ user: userId })
+            .populate({ path: 'show',select:'date time' })
+            .populate({ path: 'movie',select:'title posterUrl' });
 
-        if (tickets) {
-            return res.status(200).json(tickets)
+        if (bookings) {
+            return res.status(200).json(bookings)
         } else {
             return res.status(404).json({ status: false, message: "Tickets not found" })
         }
@@ -68,11 +81,11 @@ export const getTickets = async (req, res) => {
 export const getBookingsShow = async (req, res) => {
     try {
         let showId = req.params.id;
-          
+
         let bookings = await Booking.aggregate([
             {
-                $match:{
-                    show:new mongoose.Types.ObjectId(showId)
+                $match: {
+                    show: new mongoose.Types.ObjectId(showId)
                 }
             },
             {
@@ -113,7 +126,7 @@ export const getBookingsShow = async (req, res) => {
                     _id: 0,
                     bookingDate: 1,
                     selectedSeats: 1,
-                    totalAmount:1,
+                    totalAmount: 1,
                     userName: "$user.name",
                     movieTitle: "$movie.title"
                 }

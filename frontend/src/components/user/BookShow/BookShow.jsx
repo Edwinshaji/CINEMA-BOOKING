@@ -16,6 +16,7 @@ const BookShow = () => {
     const [shows, setShows] = useState([]);
     const [dates, setDates] = useState([]);
     const [times, setTimes] = useState([]);
+    const [totalAmount, setTotalamount] = useState(0);
 
     const [showPopup, setShowPopup] = useState(false);
 
@@ -40,7 +41,7 @@ const BookShow = () => {
 
     // after selecting the seats when we press checkout button this function is called
     const handleCheckOut = async () => {
-        await axios.post('http://localhost:5000/api/user/bookTicket', { userId: user._id, movieId: movieId, showId: selectedShow._id, selectedSeats: selectedSeats, totalAmount: 0 }, { withCredentials: true })
+        await axios.post('http://localhost:5000/api/user/bookTicket', { userId: user._id, movieId: movieId, showId: selectedShow._id, selectedSeats: selectedSeats, totalAmount: totalAmount }, { withCredentials: true })
             .then((response) => {
                 alert(response.data.message)
                 window.location.reload();
@@ -175,6 +176,10 @@ const BookShow = () => {
         }
     }, [selectedDate, selectedTime, shows]);
 
+    useEffect(() => {
+        setTotalamount(selectedSeats.length * 150)
+        console.log(totalAmount)
+    }, [handleCheckOut])
     return (
         <div className="booking-page">
 
@@ -243,7 +248,7 @@ const BookShow = () => {
                 ))}
             </div>
 
-            <button className="checkout-btn" disabled={selectedSeats.length === 0} onClick={()=>setShowPopup(true)}>
+            <button className="checkout-btn" disabled={selectedSeats.length === 0} onClick={() => setShowPopup(true)}>
                 Proceed to Book ({selectedSeats.length} seats)
             </button>
             {
@@ -253,7 +258,7 @@ const BookShow = () => {
                         selectedDate={selectedDate}
                         selectedTime={selectedTime}
                         selectedSeats={selectedSeats}
-                        totalAmount={selectedSeats.length * 150}
+                        totalAmount={totalAmount}
                         onClose={() => setShowPopup(false)}
                         onConfirm={handleCheckOut}
                     /></ProtectedRoute>

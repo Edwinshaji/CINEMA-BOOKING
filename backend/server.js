@@ -4,10 +4,12 @@ import cors from 'cors'
 import cookieParser from 'cookie-parser';
 import path from 'path';
 import { fileURLToPath } from 'url';
+import cron from 'node-cron';
 
 import { connectDB } from './config/db.js';
 import UserRouter from './routes/user.route.js';
 import AdminRouter from './routes/admin.route.js'
+import { expiresBookings } from './jobs/expires-booking.js';
 
 const app = express();
 const __filename = fileURLToPath(import.meta.url);
@@ -26,6 +28,10 @@ app.use('/poster-images',express.static(path.join(__dirname,'public/poster-image
 
 app.use("/api/user", UserRouter)
 app.use("/api/admin", AdminRouter)
+
+cron.schedule('* * * * *',()=>{
+    expiresBookings();
+})
 
 app.listen(5000, () => {
     connectDB();

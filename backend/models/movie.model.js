@@ -27,6 +27,5 @@ const MovieSchema = new Schema({
     timestamps: true //createdAt , updatedAt
 })
 
-const Movie = mongoose.model('movie', MovieSchema)
-
+const Movie = mongoose.model('Movie', MovieSchema);
 export default Movie;
