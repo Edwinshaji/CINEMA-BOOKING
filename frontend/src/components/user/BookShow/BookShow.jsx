@@ -5,6 +5,7 @@ import axios from "axios";
 import { UserContext } from "../../../../context/userContext";
 import CheckoutPopup from "../CheckOut/CheckoutPopup";
 import ProtectedRoute from "../../../routes/ProtectedRoute";
+import { toast } from "react-toastify";
 
 
 const BookShow = () => {
@@ -43,9 +44,12 @@ const BookShow = () => {
     const handleCheckOut = async () => {
         await axios.post('http://localhost:5000/api/user/bookTicket', { userId: user._id, movieId: movieId, showId: selectedShow._id, selectedSeats: selectedSeats, totalAmount: totalAmount }, { withCredentials: true })
             .then((response) => {
-                alert(response.data.message)
-                window.location.reload();
+                toast.success(response.data.message)
+                setShowPopup(false)
             })
+        setTimeout(() => {
+            window.location.reload();
+        }, 3000);
     }
 
     // when we press book tickets from movie page we want to get the id of movie is selected for that we 
@@ -77,11 +81,12 @@ const BookShow = () => {
     // stored in dates state
     useEffect(() => {
         const uniqueDates = [];
-
+        const currentDate = new Date();
+        const currentDateString = currentDate.toISOString().split('T')[0]
         // if the shows include same dates multiple it filter it into a uniqueDate[]
         shows.forEach((show) => {
             const cleanDate = new Date(show.date).toISOString().split('T')[0];
-            if (!uniqueDates.includes(cleanDate)) {
+            if (!uniqueDates.includes(cleanDate) && cleanDate > currentDateString) {
                 uniqueDates.push(cleanDate)
             }
         })
@@ -137,11 +142,16 @@ const BookShow = () => {
                 .filter(show => formatToDMY(show.date) === selectedDate)
                 .map(show => show.time);
 
-            const updatedTimes = Array.from(new Set(timesForDate)).sort((a, b) => {
-                const timeA = new Date(`1970-01-01T${convertTo24Hour(a)}:00`);
-                const timeB = new Date(`1970-01-01T${convertTo24Hour(b)}:00`);
-                return timeA - timeB;
-            });
+            const currentTime = new Date();
+            const currentTimeString = `${String(currentTime.getHours()).padStart(2, '0')}:${String(currentTime.getMinutes()).padStart(2, '0')}`;
+
+            const updatedTimes = Array.from(new Set(timesForDate))
+                .sort((a, b) => {
+                    const timeA = new Date(`1970-01-01T${convertTo24Hour(a)}:00`);
+                    const timeB = new Date(`1970-01-01T${convertTo24Hour(b)}:00`);
+                    return timeA - timeB;
+                })
+                .filter((time) => convertTo24Hour(time) > currentTimeString); // Filter for future times only
 
             //  Set both together, based on local `updatedTimes`
             setTimes(updatedTimes);

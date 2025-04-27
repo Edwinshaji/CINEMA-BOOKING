@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import './AddMovie.css';
 import axios from 'axios';
 import { useLocation, useNavigate } from 'react-router-dom';
+import { toast } from 'react-toastify';
 
 const AddMovie = () => {
   const navigate = useNavigate();
@@ -35,19 +36,20 @@ const AddMovie = () => {
     data.append('poster_image', formData.poster_image);
 
     if (location.state != null) {
-      axios.put('http://localhost:5000/api/admin/editMovie/' + location.state.values._id, data).then((response) => {
-        alert(response.data.message)
-        navigate('/admin/movies')
-      })
+      axios.put('http://localhost:5000/api/admin/editMovie/' + location.state.values._id, data)
+        .then((response) => {
+          toast.success(response.data.message)
+          navigate('/admin/movies')
+        })
     } else {
 
       axios.post('http://localhost:5000/api/admin/addMovie', data)
         .then((response) => {
-          alert(response.data.message)
+          toast.success(response.data.message)
           navigate('/admin/movies')
         })
         .catch((err) => {
-          console.log(err)
+          toast.error('Something went wrong!')
         })
     }
 
@@ -61,10 +63,10 @@ const AddMovie = () => {
         description: location.state.values.description,
         duration: location.state.values.duration,
         language: location.state.values.language,
-        poster_image:location.state.values.posterUrl
+        poster_image: location.state.values.posterUrl
       })
     }
-  },[])
+  }, [])
 
   return (
     <div className="add-movie-container">

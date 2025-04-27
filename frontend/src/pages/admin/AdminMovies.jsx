@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from 'react'
 import './css/AdminMovies.css'
-import { Link,  useNavigate } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import axios from 'axios';
+import { toast } from 'react-toastify';
 
 function AdminMovies() {
   const navigate = useNavigate();
@@ -24,34 +25,44 @@ function AdminMovies() {
   const removeHandler = async (id) => {
     await axios.get('http://localhost:5000/api/admin/deactivateMovie/' + id)
       .then((response) => {
-        alert(response.data.message)
-        window.location.reload();
+        toast.success(response.data.message)
       })
       .catch((err) => {
-        console.log(err)
+        toast.error('Something went wrong!')
       })
+
+    setTimeout(() => {
+      window.location.reload();
+    }, 3000)
   }
 
   const liveHandler = async (id) => {
     await axios.get('http://localhost:5000/api/admin/activateMovie/' + id)
       .then((response) => {
-        alert(response.data.message)
-        window.location.reload();
+        toast.success(response.data.message)
       })
       .catch((err) => {
-        console.log(err)
+        toast.error('Something went wrong!')
       })
+
+    setTimeout(() => {
+      window.location.reload();
+    }, 3000)
   }
 
   const deleteHandler = async (id) => {
     await axios.delete('http://localhost:5000/api/admin/deleteMovie/' + id)
       .then((response) => {
-        alert(response.data.message)
+        toast.success(response.data.message)
         window.location.reload();
       })
       .catch((err) => {
-        console.log(err)
+        toast.error('Something went wrong!')
       })
+
+    setTimeout(() => {
+      window.location.reload();
+    }, 3000)
   }
 
   return (

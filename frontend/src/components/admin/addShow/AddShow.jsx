@@ -4,6 +4,7 @@ import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
 import '../addShow/AddShow.css';
 import axios from 'axios';
+import { toast } from 'react-toastify';
 
 const AddShow = () => {
     const [movies, setMovies] = useState([]);
@@ -56,11 +57,9 @@ const AddShow = () => {
 
     const handleAddShow = async () => {
         if (!selectedMovie || selectedDates.length === 0 || showTimes.length === 0) {
-            alert('Please fill in all fields.');
+            toast.error('Please fill all the fields')
             return;
         }
-        console.log(selectedDates)
-
         const data = {
             movieId: selectedMovie.value,
             dates: selectedDates.map(d => new Date(d).toISOString().split('T')[0]),
@@ -69,13 +68,13 @@ const AddShow = () => {
 
         await axios.post('http://localhost:5000/api/admin/addShows', data)
             .then((response) => {
-                alert(response.data.message);
+                toast.success(response.data.message);
                 setSelectedMovie(null);
                 setSelectedDates([]);
                 setShowTimes([]);
             })
             .catch((err) => {
-                console.log(err)
+                toast.error('Something went wrong')
             })
 
     };

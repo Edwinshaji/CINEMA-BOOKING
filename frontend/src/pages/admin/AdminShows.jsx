@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import './css/AdminShows.css'; // styling below
 import { Link, useLocation } from 'react-router-dom';
 import axios from 'axios';
+import { toast } from 'react-toastify';
 
 
 const AdminShows = () => {
@@ -31,12 +32,15 @@ const AdminShows = () => {
   const handleDelete = async (showId) => {
     await axios.delete('http://localhost:5000/api/admin/deleteShow/' + showId)
       .then((response) => {
-        alert(response.data.message)
-        window.location.reload();
+        toast.success(response.data.message)
       })
       .catch((err) => {
-        console.log(err)
+        toast.error('Something went wrong!')
       })
+
+    setTimeout(() => {
+      window.location.reload();
+    }, 3000)
   }
 
   return (

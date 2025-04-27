@@ -3,6 +3,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import './css/Login.css';
 import { UserContext } from '../../../context/userContext';
+import { toast } from 'react-toastify';
 
 function Login() {
     const navigate = useNavigate();
@@ -23,7 +24,7 @@ function Login() {
                 }
             })
             .catch((error) => {
-                alert(error.response.data.message)
+                toast.error(error.response.data.message)
             })
     };
 

@@ -87,16 +87,16 @@ export const userLogout = async (req, res) => {
 export const editProfile = async (req, res) => {
 
     // fetching the data passed from front into variable
-    let { name } = req.body;
+    let { newName } = req.body;
     let id = req.params.id;
 
     try {
         // checking if name is empty
-        if (!name) {
+        if (!newName) {
             return res.status(400).json({ status: false, message: "Name is required!" })
         }
         // updating the name
-        await User.findByIdAndUpdate(id, name);
+        await User.findByIdAndUpdate(id, {name:newName});
         return res.status(200).json({ status: true, message: "Name upadated successfuly" })
     } catch (error) {
         return res.status(500).json({ status: false, message: "Server Error" })
@@ -105,23 +105,30 @@ export const editProfile = async (req, res) => {
 }
 
 export const changePassword = async (req, res) => {
-
-    // fetching the data passed from front into variable
     let id = req.params.id;
     let { oldPassword, newPassword } = req.body;
-
+  
     try {
-        // comparing the old password user enter with the current password in the databse
-        let user = await User.findById(id);
-        if (await bcrypt.compare(oldPassword, user.password)) {
-            // updating the password
-            await User.findByIdAndUpdate(id, bcrypt.hash(newPassword, 10))
-            return res.status(200).json({ status: true, message: "Password updated successfuly" })
-        } else {
-            return res.status(400).json({ status: false, message: "Old password is incorrect" })
-        }
+      let user = await User.findById(id);
+  
+      if (!user) {
+        return res.status(404).json({ status: false, message: "User not found" });
+      }
+  
+      const isMatch = await bcrypt.compare(oldPassword, user.password);
+  
+      if (!isMatch) {
+        return res.status(400).json({ status: false, message: "Old password is incorrect" });
+      }
+  
+      const hashedPassword = await bcrypt.hash(newPassword, 10);
+  
+      await User.findByIdAndUpdate(id, { password: hashedPassword });
+  
+      return res.status(200).json({ status: true, message: "Password updated successfully" });
     } catch (error) {
-        return res.status(500).json({ status: false, message: "Server Error" })
+      console.error(error);
+      return res.status(500).json({ status: false, message: "Server Error" });
     }
-
-}
+  };
+  

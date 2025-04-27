@@ -1,29 +1,87 @@
-import React, { useContext } from 'react'
+import React, { useContext, useState } from 'react';
+import './css/Account.css'; // We'll create this CSS next
+import { UserContext } from '../../../context/userContext';
 import axios from 'axios';
-import { useNavigate } from 'react-router-dom'
-import { UserContext } from '../../../context/userContext'
+import { toast } from 'react-toastify';
+import { useLocation } from 'react-router-dom';
+import EditProfile from '../../components/user/EditProfile/EditProfile';
+import ChangePassword from '../../components/user/ChangePassword/ChangePassword';
+import avatar from '../../assets/avatar.jpg'
 
-function Account() {
-  const {setUser} = useContext(UserContext)
-  const navigate = useNavigate();
+const Account = () => {
+  const location = useLocation();
+  const { user } = useContext(UserContext)
+  const [editProfilePopup, setEditProfilePopup] = useState(false);
+  const [changePassPopup, setChangePassPopup] = useState(false);
 
-  const handleLogout = async()=>{
-    await axios.get('http://localhost:5000/api/user/logout',{withCredentials:true})
-    .then((response)=>{
-      setUser(null)
-      navigate('/login')
-    })
-    .catch((error)=>{
-      console.log("Logout Failed : ",error)
-    })
+  const handleEditProfile = async (newName) => {
+    await axios.put('http://localhost:5000/api/user/editProfile/' + user._id, { newName })
+      .then((response) => {
+        toast.success(response.data.message);
+      })
+      .catch((error)=>{
+        toast.error("Something went wrong!");
+      })
+  };
+
+  const handleChangePassword = async (oldPassword, newPassword) => {
+    await axios.put(`http://localhost:5000/api/user/changePassword/${user._id}`, { oldPassword, newPassword })
+      .then((response) => {
+        toast.success(response.data.message);
+      })
+      .catch((err)=>{
+        toast.error("Something went wrong!")
+      })
+  };
+
+  const handleLogout = async () => {
+    await axios.get('http://localhost:5000/api/user/logout', { withCredentials: true })
+      .then(() => {
+        window.location.reload();
+      })
   };
 
   return (
-    <div>
-      <h1>Account</h1>
-      <button onClick={handleLogout}>Logout</button>
-    </div>
-  )
-}
+    <div className="account-page">
+      <div className="account-card">
+        <div className="user-info">
+          <img
+            src={avatar}
+            alt="User Avatar"
+            className="avatar"
+          />
+          <h2 className="username">{user.name}</h2>
+          <p className="useremail">{user.email}</p>
+        </div>
 
-export default Account
+        <div className="account-options">
+          <button className="account-btn" onClick={() => setEditProfilePopup(true)}>
+            Edit Profile
+          </button>
+          <button className="account-btn" onClick={() => setChangePassPopup(true)}>
+            Change Password
+          </button>
+          <button className="logout-btn" onClick={handleLogout}>
+            Logout
+          </button>
+        </div>
+      </div>
+
+      {editProfilePopup && (
+        <EditProfile
+          initialName={user.name}
+          onClose={() => setEditProfilePopup(false)}
+          onSave={handleEditProfile}
+        />
+      )}
+      {changePassPopup && (
+        <ChangePassword
+          onClose={() => setChangePassPopup(false)}
+          onSave={handleChangePassword}
+        />
+      )}
+    </div>
+  );
+};
+
+export default Account;

@@ -4,7 +4,7 @@
     align-items: center;
     height: 100vh;
     background: linear-gradient(135deg, #131d47 0%, #0a1230 100%);
-
+    min-height: 80vh; 
 }
 
 .signup-box {

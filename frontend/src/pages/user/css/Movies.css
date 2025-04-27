@@ -1,5 +1,6 @@
 .movies-page {
     padding: 2rem;
+    min-height: 80vh;
 }
 
 .float-title {

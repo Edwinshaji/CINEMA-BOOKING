@@ -1,5 +1,5 @@
-import { Route, Routes, Navigate, useLocation } from 'react-router-dom'
-import { useContext,useEffect } from 'react'
+import { Route, Routes, Navigate, useLocation, Router } from 'react-router-dom'
+import { useContext, useEffect } from 'react'
 import './App.css'
 import { UserContext } from '../context/userContext'
 
@@ -30,12 +30,12 @@ import BookShow from './components/user/BookShow/BookShow'
 function App() {
   const location = useLocation();
   const { user, loading } = useContext(UserContext);
-  if (loading) return <h1 style={{textAlign:'center',marginTop:100}}>Loading...</h1>;
+  if (loading) return <h1 style={{ textAlign: 'center', marginTop: 100 }}>Loading...</h1>;
 
   const isAdminRoute = location.pathname.startsWith('/admin');
   const isUserLoggedIn = user && user.role === 'user';
   const isAdminLoggedIn = user && user.role === 'admin';
-
+  
   return (
     <>
       {/*Showing appropriate navbar */}
@@ -48,12 +48,12 @@ function App() {
         <Route path="/signup" element={!user ? <Signup /> : <Navigate to="/" />} />
 
         {/*User Routes*/}
-        <Route path="/" element={<ProtectedRoute><Home /></ProtectedRoute> } />
+        <Route path="/" element={<ProtectedRoute><Home /></ProtectedRoute>} />
         <Route path="/movies" element={<ProtectedRoute><Movies /></ProtectedRoute>} />
         <Route path="/bookings" element={<ProtectedRoute><Bookings /></ProtectedRoute>} />
         <Route path="/account" element={<ProtectedRoute><Account /></ProtectedRoute>} />
-        <Route path='/movieDetails' element={<ProtectedRoute><MovieDetails /></ProtectedRoute>}/>
-        <Route path='/bookShow' element={<ProtectedRoute><BookShow /></ProtectedRoute>}/>
+        <Route path='/movieDetails' element={<ProtectedRoute><MovieDetails /></ProtectedRoute>} />
+        <Route path='/bookShow' element={<ProtectedRoute><BookShow /></ProtectedRoute>} />
 
         {/*Admin Routes */}
         <Route path="/admin/dashboard" element={<AdminRoute><AdminDashboard /></AdminRoute>} />
@@ -61,9 +61,10 @@ function App() {
         <Route path="/admin/bookings" element={<AdminRoute><AdminBookings /></AdminRoute>} />
         <Route path="/admin/shows" element={<AdminRoute><AdminShows /></AdminRoute>} />
         <Route path="/admin/addMovie" element={<AdminRoute><AddMovie /></AdminRoute>} />
-        <Route path='/admin/addShow' element={<AdminRoute><AddShow /></AdminRoute>}/>
-        <Route path='/admin/listBookings' element={<AdminRoute><ListBookings /></AdminRoute>}/>
+        <Route path='/admin/addShow' element={<AdminRoute><AddShow /></AdminRoute>} />
+        <Route path='/admin/listBookings' element={<AdminRoute><ListBookings /></AdminRoute>} />
       </Routes>
+
     </>
   )
 }

@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import axios from 'axios';
 import './css/Signup.css';
+import { toast } from 'react-toastify';
 
 function Signup() {
   const [name, setName] = useState('');
@@ -17,7 +18,7 @@ function Signup() {
         navigate('/login')
       })
       .catch((error) => {
-        alert(error.response.data.message)
+        toast.error(error.response.data.message)
       })
 
   };

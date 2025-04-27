@@ -2,6 +2,8 @@ import React, { useContext, useEffect, useState } from "react";
 import axios from "axios";
 import "./css/Bookings.css";
 import { UserContext } from "../../../context/userContext";
+import TicketPopup from "../../components/user/TicketPopup/TicketPopup";
+import { toast } from "react-toastify";
 
 const Bookings = () => {
   const { user } = useContext(UserContext);
@@ -42,9 +44,12 @@ const Bookings = () => {
     e.stopPropagation();
     const bookingId = booking._id;
     try {
-      const response = await axios.put(`http://localhost:5000/api/user/cancelTicket/${user._id}/${bookingId}`,{booking});
-      alert(response.data.message);
-      window.location.reload(); // reload to refresh updated status
+      const response = await axios.put(`http://localhost:5000/api/user/cancelTicket/${user._id}/${bookingId}`, { booking });
+      toast.success(response.data.message);
+
+      setTimeout(()=>{
+        window.location.reload(); // reload to refresh updated status
+      },3000)
     } catch (error) {
       console.error("Cancel booking failed", error);
     }
@@ -137,26 +142,16 @@ const Bookings = () => {
 
       {/* Popup Modal for Booking Details */}
       {showPopup && selectedBooking && (
-        <div className="popup-overlay">
-          <div className="popup">
-            <button className="close-btn" onClick={handleClosePopup}>
-              &times;
-            </button>
-            <img
-              src={`http://localhost:5000/poster-images/${selectedBooking.movie.posterUrl}`}
-              alt={selectedBooking.movie.title}
-              className="popup-poster"
-            />
-            <div className="popup-info">
-              <h2 style={{ color: "#333", marginBottom: "1rem" }}>{selectedBooking.movie.title}</h2>
-              <p><strong>Date:</strong> {new Date(selectedBooking.show.date).toISOString().split('T')[0]}</p>
-              <p><strong>Time:</strong> {selectedBooking.show.time}</p>
-              <p><strong>Seats:</strong> {selectedBooking.selectedSeats.join(", ")}</p>
-              <p><strong>Status:</strong> {selectedBooking.status}</p>
-              <p><strong>Total Amount:</strong> ₹{selectedBooking.totalAmount}</p>
-            </div>
-          </div>
-        </div>
+        <TicketPopup
+          poster={selectedBooking.movie.posterUrl}
+          movie={selectedBooking.movie.title}
+          date={new Date(selectedBooking.show.date).toISOString().split('T')[0]}
+          time={selectedBooking.show.time}
+          seats={selectedBooking.selectedSeats.join(", ")}
+          status={selectedBooking.status}
+          totalAmount={selectedBooking.totalAmount}
+          onClose={handleClosePopup}
+        />
       )}
     </div>
   );

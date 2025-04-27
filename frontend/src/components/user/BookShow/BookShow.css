@@ -4,8 +4,6 @@
     background-color: #e6f0ff;
     /* pastel blue background */
     color: #222;
-    /* dark text for contrast */
-    min-height: 100vh;
 }
 
 .selectors {
@@ -164,10 +162,16 @@
 @media screen and (max-width: 768px) {
     .selectors {
         flex-direction: column;
+        align-items: stretch;
         gap: 1rem;
     }
 
     .seats-layout {
         grid-template-columns: repeat(5, 1fr);
+    }
+
+    .date-picker,
+    .time-picker{
+        width: 100%;
     }
 }
