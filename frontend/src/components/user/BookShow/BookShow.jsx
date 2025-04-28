@@ -86,7 +86,7 @@ const BookShow = () => {
         // if the shows include same dates multiple it filter it into a uniqueDate[]
         shows.forEach((show) => {
             const cleanDate = new Date(show.date).toISOString().split('T')[0];
-            if (!uniqueDates.includes(cleanDate) && cleanDate > currentDateString) {
+            if (!uniqueDates.includes(cleanDate) && cleanDate >= currentDateString) {
                 uniqueDates.push(cleanDate)
             }
         })
@@ -142,8 +142,8 @@ const BookShow = () => {
                 .filter(show => formatToDMY(show.date) === selectedDate)
                 .map(show => show.time);
 
-            const currentTime = new Date();
-            const currentTimeString = `${String(currentTime.getHours()).padStart(2, '0')}:${String(currentTime.getMinutes()).padStart(2, '0')}`;
+            const currentDateTime = new Date();
+            const currentDateFormatted = formatToDMY(currentDateTime);
 
             const updatedTimes = Array.from(new Set(timesForDate))
                 .sort((a, b) => {
@@ -151,13 +151,29 @@ const BookShow = () => {
                     const timeB = new Date(`1970-01-01T${convertTo24Hour(b)}:00`);
                     return timeA - timeB;
                 })
-                .filter((time) => convertTo24Hour(time) > currentTimeString); // Filter for future times only
+                .filter((time) => {
+                    if (selectedDate !== currentDateFormatted) {
+                        // Future dates - keep all times
+                        return true;
+                    } else {
+                        // Today's date - filter by current time
+                        const showTime = new Date(`1970-01-01T${convertTo24Hour(time)}:00`);
+                        const nowTime = new Date(`1970-01-01T${String(currentDateTime.getHours()).padStart(2, '0')}:${String(currentDateTime.getMinutes()).padStart(2, '0')}:00`);
+                        return showTime > nowTime;
+                    }
+                });
 
-            //  Set both together, based on local `updatedTimes`
-            setTimes(updatedTimes);
-            setSelectedTime((prev) =>
-                updatedTimes.includes(prev) ? prev : updatedTimes[0] || null
-            );
+            if (updatedTimes.length === 0) {
+                // No future shows for this date, so remove selected date
+                setSelectedDate(null);
+                setTimes([]);
+                setSelectedTime(null);
+            } else {
+                setTimes(updatedTimes);
+                setSelectedTime((prev) =>
+                    updatedTimes.includes(prev) ? prev : updatedTimes[0] || null
+                );
+            }
         }
     }, [selectedDate, shows]);// Re-run when selectedDate or shows change
 
@@ -188,7 +204,6 @@ const BookShow = () => {
 
     useEffect(() => {
         setTotalamount(selectedSeats.length * 150)
-        console.log(totalAmount)
     }, [handleCheckOut])
     return (
         <div className="booking-page">

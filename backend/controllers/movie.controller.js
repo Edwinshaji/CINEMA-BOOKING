@@ -38,7 +38,7 @@ export const editMovie = async (req, res) => {
             }
         })
         // finding and updating the movie  
-        await Movie.findByIdAndUpdate(movieId, { title, description, duration, language, posterUrl:newPosterUrl })
+        await Movie.findByIdAndUpdate(movieId, { title, description, duration, language, posterUrl: newPosterUrl })
             .then(() => {
                 return res.status(200).json({ status: true, message: "Movie updated successfuly" })
             })
@@ -135,9 +135,20 @@ export const activateMovie = async (req, res) => {
     }
 }
 
-export const getActiveMovies = async(req,res)=>{
+export const getActiveMovies = async (req, res) => {
     try {
-        const movies = await Movie.find({isActive:true})
+        const movies = await Movie.find({ isActive: true })
+        return res.status(200).json(movies)
+    } catch (error) {
+        return res.status(500).json({ status: false, message: "Server Error" })
+    }
+}
+
+export const getLatestMovies = async (req, res) => {
+    try {
+        const movies = await Movie.find({ isActive: true })
+            .sort({ createdAt: -1 }) 
+            .limit(4);
         return res.status(200).json(movies)
     } catch (error) {
         return res.status(500).json({ status: false, message: "Server Error" })

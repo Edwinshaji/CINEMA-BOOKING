@@ -1,6 +1,5 @@
 .movies-page {
-    padding: 2rem;
-    min-height: 80vh;
+    padding: 3rem;
 }
 
 .float-title {
@@ -19,7 +18,7 @@
     border-radius: 5rem;
     background-color: rgb(236, 255, 96);
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
-    margin-bottom:2rem ;
+    margin-bottom: 2rem;
 }
 
 .movies-banner h1 {
@@ -46,6 +45,8 @@
     backdrop-filter: blur(10px);
     border: 1px solid rgba(255, 255, 255, 0.05);
     text-align: center;
+    width: 100%;
+    max-width: 100%;
 }
 
 .movie-card:hover {
@@ -111,11 +112,13 @@
 /* Responsive styles */
 @media screen and (max-width: 768px) {
     .movies-grid {
+        display: flex;
+        flex-direction: column;
         grid-template-columns: 1fr;
         padding: 1rem;
     }
 
-    .banner h1 {
+    .movies-banner h1 {
         font-size: 2rem;
     }
 }

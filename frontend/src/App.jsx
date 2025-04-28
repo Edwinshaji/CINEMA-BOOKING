@@ -26,6 +26,7 @@ import AddShow from './components/admin/addShow/AddShow'
 import ListBookings from './components/admin/listBookings/ListBookings'
 import MovieDetails from './components/user/MovieDetails/MovieDetails'
 import BookShow from './components/user/BookShow/BookShow'
+import Footer from './components/user/Footer/Footer'
 
 function App() {
   const location = useLocation();
@@ -35,24 +36,25 @@ function App() {
   const isAdminRoute = location.pathname.startsWith('/admin');
   const isUserLoggedIn = user && user.role === 'user';
   const isAdminLoggedIn = user && user.role === 'admin';
-  
+
   return (
     <>
       {/*Showing appropriate navbar */}
-      {isUserLoggedIn && <UserNavBar />}
-      {isAdminLoggedIn && <AdminNavBar />}
+      {isAdminLoggedIn ? <AdminNavBar /> : <UserNavBar user={user} />}
+
       <Routes>
         {/*Public Routes */}
         <Route path="/login" element={!isUserLoggedIn ? <Login /> : <Navigate to="/" />} />
         <Route path="/login" element={!isAdminLoggedIn ? <Login /> : <Navigate to="/admin/dashboard" />} />
         <Route path="/signup" element={!user ? <Signup /> : <Navigate to="/" />} />
 
+        <Route path="/" element={<Home />} />
+        <Route path="/movies" element={<Movies />} />
+        <Route path='/movieDetails' element={<MovieDetails />} />
+
         {/*User Routes*/}
-        <Route path="/" element={<ProtectedRoute><Home /></ProtectedRoute>} />
-        <Route path="/movies" element={<ProtectedRoute><Movies /></ProtectedRoute>} />
         <Route path="/bookings" element={<ProtectedRoute><Bookings /></ProtectedRoute>} />
         <Route path="/account" element={<ProtectedRoute><Account /></ProtectedRoute>} />
-        <Route path='/movieDetails' element={<ProtectedRoute><MovieDetails /></ProtectedRoute>} />
         <Route path='/bookShow' element={<ProtectedRoute><BookShow /></ProtectedRoute>} />
 
         {/*Admin Routes */}
@@ -64,6 +66,8 @@ function App() {
         <Route path='/admin/addShow' element={<AdminRoute><AddShow /></AdminRoute>} />
         <Route path='/admin/listBookings' element={<AdminRoute><ListBookings /></AdminRoute>} />
       </Routes>
+
+      {isUserLoggedIn && <Footer />}
 
     </>
   )

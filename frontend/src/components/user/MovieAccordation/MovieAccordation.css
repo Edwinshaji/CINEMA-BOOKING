@@ -1,0 +1,94 @@
+/* Accordion Slider */
+.accordion-slider {
+    display: flex;
+    width: 100%;
+    height: 30rem;
+    overflow: hidden;
+    margin-bottom: 40px;
+}
+
+.accordion-panel {
+    flex: 1;
+    position: relative;
+    overflow: hidden;
+    transition: flex 0.5s ease-in-out;
+    cursor: pointer;
+}
+
+.accordion-panel img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.5s ease;
+}
+
+.accordion-panel .accordion-content {
+    position: absolute;
+    bottom: 0rem;
+    left: 0rem;
+    width: 100%;
+    text-align: center;
+    color: white;
+    background: rgba(0, 0, 0, 0.5);
+    padding: 30px 20px;
+    border-radius: 5px;
+    opacity: 0;
+    transform: translateY(10px);
+    transition: opacity 0.5s, transform 0.5s;
+}
+
+/* Hover / Active Effects */
+.accordion-panel.active {
+    flex: 1.3;
+}
+
+.accordion-panel.active img {
+    transform: scale(1);
+}
+
+.accordion-panel.active .accordion-content {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+/* Latest Movies */
+.section-title {
+    text-align: center;
+    margin-bottom: 20px;
+    margin-top: 3rem;
+}
+
+@media (max-width: 768px) {
+    .accordion-slider {
+        flex-direction: column;
+        height: auto;
+    }
+
+    .accordion-panel {
+        flex: none;
+        height: 250px;
+    }
+
+    .accordion-panel.active {
+        flex: none;
+        height: 350px;
+    }
+
+    .movies-grid {
+        grid-template-columns: 1fr 1fr;
+    }
+
+    .about-section {
+        flex-direction: column;
+        text-align: center;
+    }
+    .accordion-panel img {
+        width: 100%;
+        height: 100%;
+        object-fit: contain;
+        transition: transform 0.5s ease;
+    }
+    .accordion-panel.active {
+        flex: 1.2;
+    }
+}

@@ -1,44 +1,53 @@
 import React, { useState, useEffect } from 'react';
-import '../Banner/Banner.css'; // Importing the CSS
-
-const images = [
-    'https://i.redd.it/wgsajydj1r3d1.jpeg',
-    'https://static.toiimg.com/thumb/msid-113501216,width-1280,height-720,resizemode-4/113501216.jpg',
-    'https://pbs.twimg.com/media/E_iq1p1VUAcuIDJ.jpg:large'
-];
+import '../Banner/Banner.css';
+import axios from 'axios';
 
 const Banner = () => {
-    // current variable is used as the index of the image array
+    const [latestMovies, setLatestMovies] = useState([]);
     const [current, setCurrent] = useState(0);
-    // length of the array
-    const length = images.length;
 
-    // eveery time the component mounted the useEffect works
     useEffect(() => {
-        // using setInterval function is a timer function after every 5 seconds the value of the current is incremented by 1 
-        // and after reaching the array length the current is set to 0 to iterate again to the first image 
+        axios.get('http://localhost:5000/api/user/getLatestMovies')
+            .then((response) => {
+                setLatestMovies(response.data);
+            });
+    }, []);
+
+    useEffect(() => {
         const interval = setInterval(() => {
-            setCurrent(prev => (prev + 1) % length);
-        }, 5000);
-        // clearInterval function is used to clear the timer
+            setCurrent(prev => (prev + 1) % latestMovies.length);
+        }, 2500); // Change every 2.5s
+
         return () => clearInterval(interval);
-    }, [length]);
+    }, [latestMovies.length]);
+
+    const getIndex = (index) => {
+        const total = latestMovies.length;
+        return (index + total) % total;
+    };
 
     return (
-        <div className="banner">
-            <div className="banner-slider">
-                {images.map((img, index) => (
-                    <div
-                        className={`slide ${index === current ? 'active' : ''}`}
-                        key={index}
-                    >
-                        {index === current && <img src={img} alt={`Slide ${index + 1}`} />}
+        <div className="banner-carousel">
+            {latestMovies.length > 0 && (
+                <>
+                    {/* Left */}
+                    <div className="carousel-image left">
+                        <img src={`http://localhost:5000/poster-images/${latestMovies[getIndex(current - 1)].posterUrl}`} alt="Left Poster" />
                     </div>
-                ))}
-            </div>
+
+                    {/* Center */}
+                    <div className="carousel-image center">
+                        <img src={`http://localhost:5000/poster-images/${latestMovies[getIndex(current)].posterUrl}`} alt="Center Poster" />
+                    </div>
+
+                    {/* Right */}
+                    <div className="carousel-image right">
+                        <img src={`http://localhost:5000/poster-images/${latestMovies[getIndex(current + 1)].posterUrl}`} alt="Right Poster" />
+                    </div>
+                </>
+            )}
         </div>
     );
 };
 
 export default Banner;
-

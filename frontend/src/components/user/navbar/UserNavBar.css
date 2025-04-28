@@ -1,3 +1,4 @@
+/* Navbar Base */
 .navbar {
     background-color: #131d47;
     color: white;
@@ -5,13 +6,17 @@
     display: flex;
     align-items: center;
     justify-content: space-between;
+    position: relative;
+    height: 80px;
 }
 
+/* Logo */
 .navbar-logo img {
     width: 150px;
     height: 80px;
 }
 
+/* Links Default (Desktop) */
 .navbar-links {
     display: flex;
     gap: 24px;
@@ -26,5 +31,53 @@
 
 .navbar-links a:hover {
     color: #f2fab0;
+}
 
+/* Toggle Button (Hidden by default) */
+.navbar-toggle {
+    display: none;
+    flex-direction: column;
+    cursor: pointer;
+    gap: 5px;
+}
+
+.bar {
+    width: 30px;
+    height: 4px;
+    background-color: white;
+}
+
+/* Mobile View */
+@media (max-width: 768px) {
+    /* Show Toggle */
+    .navbar-toggle {
+        display: flex;
+        z-index: 1000;
+    }
+
+    /* Hide links unless active */
+    .navbar-links {
+        display: none;
+        flex-direction: column;
+        position: absolute;
+        top: 60px;
+        right: 0%;
+        background-color: #131d47;
+        width: 30%;
+        padding: 20px;
+        z-index: 1000;
+    }
+
+    .navbar-links.active {
+        display: flex;
+    }
+
+    .navbar-links.hidden {
+        display: none;
+    }
+
+    .navbar-links a {
+        padding: 10px 0;
+        text-align: center;
+    }
 }
