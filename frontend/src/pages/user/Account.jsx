@@ -3,12 +3,13 @@ import './css/Account.css'; // We'll create this CSS next
 import { UserContext } from '../../../context/userContext';
 import axios from 'axios';
 import { toast } from 'react-toastify';
-import { useLocation } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import EditProfile from '../../components/user/EditProfile/EditProfile';
 import ChangePassword from '../../components/user/ChangePassword/ChangePassword';
 import avatar from '../../assets/avatar.jpg'
 
 const Account = () => {
+  const navigate = useNavigate();
   const location = useLocation();
   const { user } = useContext(UserContext)
   const [editProfilePopup, setEditProfilePopup] = useState(false);
@@ -19,7 +20,7 @@ const Account = () => {
       .then((response) => {
         toast.success(response.data.message);
       })
-      .catch((error)=>{
+      .catch((error) => {
         toast.error("Something went wrong!");
       })
   };
@@ -29,7 +30,7 @@ const Account = () => {
       .then((response) => {
         toast.success(response.data.message);
       })
-      .catch((err)=>{
+      .catch((err) => {
         toast.error("Something went wrong!")
       })
   };
@@ -37,6 +38,7 @@ const Account = () => {
   const handleLogout = async () => {
     await axios.get('http://localhost:5000/api/user/logout', { withCredentials: true })
       .then(() => {
+        navigate('/')
         window.location.reload();
       })
   };

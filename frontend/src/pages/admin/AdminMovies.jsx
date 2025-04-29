@@ -33,7 +33,7 @@ function AdminMovies() {
 
     setTimeout(() => {
       window.location.reload();
-    }, 3000)
+    }, 1000)
   }
 
   const liveHandler = async (id) => {
@@ -47,7 +47,7 @@ function AdminMovies() {
 
     setTimeout(() => {
       window.location.reload();
-    }, 3000)
+    }, 1000)
   }
 
   const deleteHandler = async (id) => {
@@ -62,7 +62,11 @@ function AdminMovies() {
 
     setTimeout(() => {
       window.location.reload();
-    }, 3000)
+    }, 1000)
+  }
+
+  const bookHandler = (movieId) => {
+    navigate('/bookShow', { state: { movieId } })
   }
 
   return (
@@ -81,7 +85,7 @@ function AdminMovies() {
             <th>Description</th>
             <th>Duration</th>
             <th>Language</th>
-            <th>Edit / Remove</th>
+            <th>Actions</th>
           </tr>
         </thead>
         <tbody>
@@ -94,7 +98,11 @@ function AdminMovies() {
                     <td>{movie.description}</td>
                     <td>{movie.duration}</td>
                     <td>{movie.language}</td>
-                    <td><button className='edit-btn' onClick={() => { editHandler(movie) }}>Edit</button>&nbsp;&nbsp;<button className='remove-btn' onClick={() => { removeHandler(movie._id) }}>Remove</button></td>
+                    <td>
+                      <button className='edit-btn' onClick={() => { editHandler(movie) }}>Edit</button>&nbsp;&nbsp;
+                      <button className='remove-btn' onClick={() => { removeHandler(movie._id) }}>Remove</button>&nbsp;&nbsp;
+                      <button className='book-show-btn' onClick={() => { bookHandler(movie._id) }}>Book Seats</button>
+                    </td>
                   </tr>
                 )
               }

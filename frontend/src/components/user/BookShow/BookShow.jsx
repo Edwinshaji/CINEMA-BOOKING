@@ -49,7 +49,7 @@ const BookShow = () => {
             })
         setTimeout(() => {
             window.location.reload();
-        }, 3000);
+        }, 1000);
     }
 
     // when we press book tickets from movie page we want to get the id of movie is selected for that we 

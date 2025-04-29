@@ -79,7 +79,7 @@
     background-color: blue;
     color: white;
     border: none;
-    width: 40%;
+    width: 45%;
     padding: 10px 16px;
     border-radius: 4px;
     cursor: pointer;
@@ -90,11 +90,22 @@
     background-color: red;
     color: white;
     border: none;
-    width: 40%;
+    width: 45%;
     padding: 10px 16px;
     border-radius: 4px;
     cursor: pointer;
     font-size: 15px;
+}
+.book-show-btn {
+    background-color: #22bb33;
+    color: white;
+    border: none;
+    width: 92%;
+    padding: 10px 16px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 15px;
+    margin-top: 1rem;
 }
 
 .live-btn {

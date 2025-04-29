@@ -33,17 +33,17 @@ export const cancelTicket = async (req, res) => {
     try {
         const { userId, bookingId } = req.params;
         const booking = req.body;
-        
+
         // check the document with matching of userId and bookingId and update the status to cancelled
         const showUpdated = await Show.findByIdAndUpdate(
-        {_id:booking.booking.show._id},
-        {
-            $pull:{
-                bookedSeats:{
-                    $in:booking.booking.selectedSeats
+            { _id: booking.booking.show._id },
+            {
+                $pull: {
+                    bookedSeats: {
+                        $in: booking.booking.selectedSeats
+                    }
                 }
-            }
-        })
+            })
         const updated = await Booking.findOneAndUpdate(
             { user: userId, _id: bookingId },
             {
@@ -65,8 +65,8 @@ export const getTickets = async (req, res) => {
     try {
         let userId = req.params.userId;
         const bookings = await Booking.find({ user: userId })
-            .populate({ path: 'show',select:'date time' })
-            .populate({ path: 'movie',select:'title posterUrl' });
+            .populate({ path: 'show', select: 'date time' })
+            .populate({ path: 'movie', select: 'title posterUrl' });
 
         if (bookings) {
             return res.status(200).json(bookings)
@@ -136,6 +136,33 @@ export const getBookingsShow = async (req, res) => {
             return res.status(200).json(bookings)
         } else {
             return res.status(404).json({ message: "Bookings not found" })
+        }
+    } catch (error) {
+        return res.status(500).json({ status: false, message: "Server Error" })
+    }
+}
+
+export const getTodaysBookingCount = async (req, res) => {
+    const today = new Date();
+    const start = new Date(today.setHours(0, 0, 0, 0));
+    const end = new Date(today.setHours(23, 59, 59, 999));
+    try {
+        let bookings = await Booking.aggregate([
+            {
+                $match: { bookingDate: { $gte: start, $lte: end } }
+            },
+            {
+                $group: {
+                    _id: null,
+                    totalSeats: { $sum: { $size: "$selectedSeats" } }
+                }
+            }
+        ])
+        let bookingsCount = bookings[0].totalSeats;
+        if (bookings) {
+            return res.status(200).json(bookingsCount)
+        } else {
+            return res.status(404).json({ status: false, message: "Bookings not found" })
         }
     } catch (error) {
         return res.status(500).json({ status: false, message: "Server Error" })

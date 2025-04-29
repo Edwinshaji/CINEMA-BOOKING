@@ -7,8 +7,9 @@ import './css/AdminDashboard.css'
 function AdminDashboard() {
   const { setUser } = useContext(UserContext);
   const [dateTime, setDateTime] = useState(new Date());
-  const [runningMovies, setRunningMovies] = useState(); // sample data
-  const [todaysShows, setTodaysShows] = useState(12); // sample data
+  const [runningMovies, setRunningMovies] = useState(); 
+  const [todaysShows, setTodaysShows] = useState(); 
+  const [ticketsSold,setTicketsSold] = useState();
 
   const navigate = useNavigate();
 
@@ -40,19 +41,22 @@ function AdminDashboard() {
       .then((response) => {
         setTodaysShows(response.data.length)
       })
+    axios.get('http://localhost:5000/api/admin/getTodaysBookingCount')
+    .then((response)=>{
+      setTicketsSold(response.data)
+      console.log(response.data);
+      
+    })
 
     return () => clearInterval(timer);
-  },
-    []);
-
-
-
+  },[]);
 
   const handleLogout = async () => {
     await axios.get('http://localhost:5000/api/user/logout', { withCredentials: true })
       .then((response) => {
         setUser(null)
-        navigate('/login')
+        navigate('/')
+        window.location.reload()
       })
       .catch((error) => {
         console.log("Logout Failed : ", error);
@@ -73,7 +77,7 @@ function AdminDashboard() {
 
       <div className="info-row">
         <div className="info-block">📊 Occupancy Rate: 78%</div>
-        <div className="info-block">🎟️ Tickets Sold Today: 324</div>
+        <div className="info-block">🎟️ Tickets Sold Today: {ticketsSold}</div>
       </div>
 
       <button className="logout-button" onClick={handleLogout}>

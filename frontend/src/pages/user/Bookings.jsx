@@ -49,7 +49,7 @@ const Bookings = () => {
 
       setTimeout(()=>{
         window.location.reload(); // reload to refresh updated status
-      },3000)
+      },1000)
     } catch (error) {
       console.error("Cancel booking failed", error);
     }

@@ -3,7 +3,7 @@ import multer from "multer";
 import path from 'path'
 import { activateMovie, addMovie, deactivateMovie,  deleteMovie, editMovie, getActiveMovies, getAllMovies, getSingleMovie } from '../controllers/movie.controller.js';
 import { addShows, deleteShow, editShow, getShowsByDate, getShowsSingleMovie } from '../controllers/show.controller.js';
-import { getBookingsShow } from '../controllers/booking.controller.js';
+import { getBookingsShow, getTodaysBookingCount } from '../controllers/booking.controller.js';
 
 const router = express.Router();
 
@@ -46,6 +46,8 @@ router.get('/getShowsSingleMovie/:id',getShowsSingleMovie) // api for getting th
 
 router.post('/getShowsByDate',getShowsByDate) // api for getting shows by the date
 
-router.get('/getBookingsShow/:id',getBookingsShow)
+router.get('/getBookingsShow/:id',getBookingsShow) // api for getting the bookings of a particular show
+
+router.get('/getTodaysBookingCount',getTodaysBookingCount) // api for getting the count of tickets sold today
 
 export default router;

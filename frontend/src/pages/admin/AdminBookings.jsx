@@ -36,14 +36,6 @@ const AdminBookings = () => {
   return (
     <div className="show-page">
       <h1 className="page-title float-title">Bookings</h1>
-
-      <Link to='/admin/addShow'>
-        <div className="btn-wrapper">
-          <button className="book-btn">Book Seats</button>
-        </div>
-      </Link>
-
-
       <div className="movie-list">
         
         {movies.map((movie) => (
