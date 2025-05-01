@@ -168,3 +168,23 @@ export const getTodaysBookingCount = async (req, res) => {
         return res.status(500).json({ status: false, message: "Server Error" })
     }
 }
+
+export const expireBooking = async (req, res) => {
+    let bookingId = req.params.id;
+    try {
+        let res = await Booking.findByIdAndUpdate({ _id: bookingId },
+            {
+                $set: {
+                    status: "expired"
+                }
+            })
+
+        if (res) {
+            return res.status(200).json({ status: true, message: "Booking Updated" })
+        } else {
+            return res.status(400).json({ status: true, message: "Booking Updation Failed" })
+        }
+    } catch (error) {
+        return res.status(500).json({ status: false, message: "Server Error" })
+    }
+}

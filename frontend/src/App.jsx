@@ -27,6 +27,7 @@ import ListBookings from './components/admin/listBookings/ListBookings'
 import MovieDetails from './components/user/MovieDetails/MovieDetails'
 import BookShow from './components/user/BookShow/BookShow'
 import Footer from './components/user/Footer/Footer'
+import TicketScanner from './components/admin/ticketScanner/TicketScanner'
 
 function App() {
   const location = useLocation();
@@ -65,6 +66,7 @@ function App() {
         <Route path="/admin/addMovie" element={<AdminRoute><AddMovie /></AdminRoute>} />
         <Route path='/admin/addShow' element={<AdminRoute><AddShow /></AdminRoute>} />
         <Route path='/admin/listBookings' element={<AdminRoute><ListBookings /></AdminRoute>} />
+        <Route path='/admin/ticketScanner' element={<AdminRoute><TicketScanner /></AdminRoute>} />
       </Routes>
 
       {isUserLoggedIn && <Footer />}

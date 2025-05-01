@@ -4,6 +4,7 @@ import "./css/Bookings.css";
 import { UserContext } from "../../../context/userContext";
 import TicketPopup from "../../components/user/TicketPopup/TicketPopup";
 import { toast } from "react-toastify";
+import QRCode from 'qrcode';
 
 const Bookings = () => {
   const { user } = useContext(UserContext);
@@ -12,6 +13,7 @@ const Bookings = () => {
   const [expiredBookings, setExpiredBookings] = useState([]);
   const [showPopup, setShowPopup] = useState(false);
   const [selectedBooking, setSelectedBooking] = useState(null);
+  const [QRCodeImage, setQRCodeImage] = useState('');
 
   useEffect(() => {
     const fetchBookings = async () => {
@@ -39,6 +41,24 @@ const Bookings = () => {
     fetchBookings();
   }, [user]);
 
+  useEffect(() => {
+    const generateQRCode = async () => {
+      try {
+        const codes = {};
+        for (let booking of confirmedBookings) {
+          const url = await QRCode.toDataURL(booking._id); // or booking-specific string
+          codes[booking._id] = url;
+        }
+        setQRCodeImage(codes);
+      } catch (error) {
+        console.error(error);
+      }
+    }
+
+    if (confirmedBookings?.length) {
+      generateQRCode()
+    }
+  }, [confirmedBookings])
 
   const handleCancelBooking = async (e, booking) => {
     e.stopPropagation();
@@ -47,13 +67,14 @@ const Bookings = () => {
       const response = await axios.put(`http://localhost:5000/api/user/cancelTicket/${user._id}/${bookingId}`, { booking });
       toast.success(response.data.message);
 
-      setTimeout(()=>{
+      setTimeout(() => {
         window.location.reload(); // reload to refresh updated status
-      },1000)
+      }, 1000)
     } catch (error) {
       console.error("Cancel booking failed", error);
     }
   };
+
 
   const handleShowPopup = (booking) => {
     if (booking.status === "expired") return; // Prevent popup for expired
@@ -61,10 +82,12 @@ const Bookings = () => {
     setShowPopup(true);
   };
 
+
   const handleClosePopup = () => {
     setShowPopup(false);
     setSelectedBooking(null);
   };
+
 
   const renderBookingCard = (booking) => {
     const isExpired = booking.status === "expired";
@@ -150,6 +173,7 @@ const Bookings = () => {
           seats={selectedBooking.selectedSeats.join(", ")}
           status={selectedBooking.status}
           totalAmount={selectedBooking.totalAmount}
+          QRCodeImg={QRCodeImage[selectedBooking._id]}
           onClose={handleClosePopup}
         />
       )}

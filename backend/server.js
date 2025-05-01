@@ -8,7 +8,8 @@ import cron from 'node-cron';
 
 import { connectDB } from './config/db.js';
 import UserRouter from './routes/user.route.js';
-import AdminRouter from './routes/admin.route.js'
+import AdminRouter from './routes/admin.route.js';
+import PaymentRouter from './routes/payment.route.js';
 import { expiresBookings } from './jobs/expires-booking.js';
 
 const app = express();
@@ -28,6 +29,7 @@ app.use('/poster-images',express.static(path.join(__dirname,'public/poster-image
 
 app.use("/api/user", UserRouter)
 app.use("/api/admin", AdminRouter)
+app.use("/api/payment", PaymentRouter)
 
 cron.schedule('* * * * *',()=>{
     expiresBookings();

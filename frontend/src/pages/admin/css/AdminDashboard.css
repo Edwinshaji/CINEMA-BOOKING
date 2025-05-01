@@ -60,6 +60,22 @@
     transition: transform 0.3s ease, box-shadow 0.3s ease;
   }
   
+  .scan-btn{
+    padding: 1.1rem;
+    background-color:blue;
+    color: white;
+    border-radius: 30px;
+    border: none;
+    font-size: 1rem;
+    width: 100%;
+    cursor: pointer;
+  }
+
+  .scan-btn:hover{
+    transform: scale(1.03);
+    background-color: rgb(25, 25, 181);
+  }
+
   .info-block:hover {
     transform: scale(1.03);
     box-shadow: 0 8px 20px rgba(0,0,0,0.08);

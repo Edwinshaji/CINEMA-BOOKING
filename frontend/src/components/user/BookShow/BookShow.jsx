@@ -285,7 +285,7 @@ const BookShow = () => {
                         selectedSeats={selectedSeats}
                         totalAmount={totalAmount}
                         onClose={() => setShowPopup(false)}
-                        onConfirm={handleCheckOut}
+                        onBookingComplete={handleCheckOut}
                     /></ProtectedRoute>
                 )
             }

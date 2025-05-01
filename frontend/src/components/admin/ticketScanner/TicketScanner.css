@@ -1,0 +1,37 @@
+.ticket-scanner-container {
+    padding: 2rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background-color: #f6f8fa;
+    min-height: 100vh;
+    font-family: 'Segoe UI', sans-serif;
+}
+
+.ticket-scanner-container h2 {
+    margin-bottom: 1.5rem;
+    color: #333;
+    font-size: 24px;
+}
+
+.qr-reader-wrapper {
+    width: 100%;
+    max-width: 400px;
+    background: white;
+    padding: 1rem;
+    border-radius: 16px;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+}
+
+.scan-result {
+    margin-top: 1rem;
+    font-size: 16px;
+    color: green;
+    font-weight: 500;
+}
+
+.scan-error {
+    margin-top: 1rem;
+    font-size: 16px;
+    color: red;
+}

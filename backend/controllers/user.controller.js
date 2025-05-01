@@ -96,7 +96,7 @@ export const editProfile = async (req, res) => {
             return res.status(400).json({ status: false, message: "Name is required!" })
         }
         // updating the name
-        await User.findByIdAndUpdate(id, {name:newName});
+        await User.findByIdAndUpdate(id, { name: newName });
         return res.status(200).json({ status: true, message: "Name upadated successfuly" })
     } catch (error) {
         return res.status(500).json({ status: false, message: "Server Error" })
@@ -107,28 +107,39 @@ export const editProfile = async (req, res) => {
 export const changePassword = async (req, res) => {
     let id = req.params.id;
     let { oldPassword, newPassword } = req.body;
-  
+
     try {
-      let user = await User.findById(id);
-  
-      if (!user) {
-        return res.status(404).json({ status: false, message: "User not found" });
-      }
-  
-      const isMatch = await bcrypt.compare(oldPassword, user.password);
-  
-      if (!isMatch) {
-        return res.status(400).json({ status: false, message: "Old password is incorrect" });
-      }
-  
-      const hashedPassword = await bcrypt.hash(newPassword, 10);
-  
-      await User.findByIdAndUpdate(id, { password: hashedPassword });
-  
-      return res.status(200).json({ status: true, message: "Password updated successfully" });
+        let user = await User.findById(id);
+
+        if (!user) {
+            return res.status(404).json({ status: false, message: "User not found" });
+        }
+
+        const isMatch = await bcrypt.compare(oldPassword, user.password);
+
+        if (!isMatch) {
+            return res.status(400).json({ status: false, message: "Old password is incorrect" });
+        }
+
+        const hashedPassword = await bcrypt.hash(newPassword, 10);
+
+        await User.findByIdAndUpdate(id, { password: hashedPassword });
+
+        return res.status(200).json({ status: true, message: "Password updated successfully" });
     } catch (error) {
-      console.error(error);
-      return res.status(500).json({ status: false, message: "Server Error" });
+        return res.status(500).json({ status: false, message: "Server Error" });
     }
-  };
-  
+};
+
+export const getTotalUsers = async (req, res) => {
+    try {
+        let users = await User.find();
+        let totalUsers = users.length;
+
+        if (totalUsers) {
+            return res.status(200).json(totalUsers);
+        }
+    } catch (error) {
+        return res.status(500).json({ status: false, message: "Server Error" });
+    }
+}

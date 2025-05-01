@@ -29,8 +29,8 @@ const Movies = () => {
       </div>
 
       <div className="movies-grid">
-        {movies.map((movie) => (
-          <div className="movie-card" key={movie.id}>
+        {movies.map((movie,id) => (
+          <div className="movie-card" key={id}>
             <img src={`http://localhost:5000/poster-images/${movie.posterUrl}`} alt={movie.title} />
             <h2>{movie.title}</h2>
             <p>Language: {movie.language}</p>

@@ -7,9 +7,10 @@ import './css/AdminDashboard.css'
 function AdminDashboard() {
   const { setUser } = useContext(UserContext);
   const [dateTime, setDateTime] = useState(new Date());
-  const [runningMovies, setRunningMovies] = useState(); 
-  const [todaysShows, setTodaysShows] = useState(); 
-  const [ticketsSold,setTicketsSold] = useState();
+  const [runningMovies, setRunningMovies] = useState();
+  const [todaysShows, setTodaysShows] = useState();
+  const [ticketsSold, setTicketsSold] = useState();
+  const [totalUsers, setTotalUsers] = useState();
 
   const navigate = useNavigate();
 
@@ -42,14 +43,16 @@ function AdminDashboard() {
         setTodaysShows(response.data.length)
       })
     axios.get('http://localhost:5000/api/admin/getTodaysBookingCount')
+      .then((response) => {
+        setTicketsSold(response.data)
+      })
+    axios.get('http://localhost:5000/api/admin/getTotalUsers')
     .then((response)=>{
-      setTicketsSold(response.data)
-      console.log(response.data);
-      
+      setTotalUsers(response.data)
     })
 
     return () => clearInterval(timer);
-  },[]);
+  }, []);
 
   const handleLogout = async () => {
     await axios.get('http://localhost:5000/api/user/logout', { withCredentials: true })
@@ -69,6 +72,7 @@ function AdminDashboard() {
       <div className="date-time-banner">
         {formatDateTime(dateTime)}
       </div>
+      <button onClick={() => { navigate('/admin/ticketScanner') }} className='scan-btn'>Scan Ticket</button>
 
       <div className="info-row">
         <div className="info-block">🎥 Running Movies: {runningMovies}</div>
@@ -76,8 +80,8 @@ function AdminDashboard() {
       </div>
 
       <div className="info-row">
-        <div className="info-block">📊 Occupancy Rate: 78%</div>
         <div className="info-block">🎟️ Tickets Sold Today: {ticketsSold}</div>
+        <div className="info-block">👥 Total Users: {totalUsers}</div>
       </div>
 
       <button className="logout-button" onClick={handleLogout}>

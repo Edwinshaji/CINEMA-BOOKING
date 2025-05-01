@@ -1,29 +1,46 @@
-import React from 'react'
-import './TicketPopup.css'
+import React from 'react';
+import './TicketPopup.css';
+import logo from '../../../assets/logo.png'
 
-const TicketPopup = ({ poster, movie, date, time, seats, status, totalAmount, onClose }) => {
+const TicketPopup = ({ poster, movie, date, time, seats, status, totalAmount, QRCodeImg, onClose }) => {
     return (
         <div className="popup-overlay">
-            <div className="popup">
+            <div className="popup custom-ticket">
                 <button className="close-btn" onClick={onClose}>
                     &times;
                 </button>
+
                 <img
                     src={`http://localhost:5000/poster-images/${poster}`}
                     alt={movie}
-                    className="popup-poster"
+                    className="ticket-poster"
                 />
-                <div className="popup-info">
-                    <h2 style={{ color: "#333", marginBottom: "1rem" }}>{movie}</h2>
-                    <p><strong>Date:</strong>{date}</p>
-                    <p><strong>Time:</strong> {time}</p>
-                    <p><strong>Seats:</strong> {seats}</p>
-                    <p><strong>Status:</strong> {status}</p>
-                    <p><strong>Total Amount:</strong> ₹{totalAmount}</p>
+
+                <h2 className="ticket-movie-title">{movie}</h2>
+                <p className={`ticket-status ${status}`}>{status.toUpperCase()}</p>
+
+                <div className="ticket-body">
+                    <div className="ticket-info-left">
+                        <p><strong>Date:</strong> {date}</p>
+                        <p><strong>Time:</strong> {time}</p>
+                        <p><strong>Seats:</strong> {seats}</p>
+                        <p><strong>Paid:</strong> {totalAmount}</p>
+                    </div>
+                    {QRCodeImg && (
+                        <div className="ticket-info-right">
+                            <img src={QRCodeImg} alt="QR Code" className="qr-img" />
+                        </div>
+                    )
+                    }
+                    {!QRCodeImg && (
+                        <div className='ticket-info-right'>
+                            <img src={logo} alt='CineGo' className='alt-qr-img'/>
+                        </div>
+                    )}
                 </div>
             </div>
         </div>
-    )
-}
+    );
+};
 
-export default TicketPopup
+export default TicketPopup;
