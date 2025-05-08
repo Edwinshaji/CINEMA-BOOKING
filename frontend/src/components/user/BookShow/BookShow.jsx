@@ -273,7 +273,7 @@ const BookShow = () => {
                 ))}
             </div>
 
-            <button className="checkout-btn" disabled={selectedSeats.length === 0} onClick={() => setShowPopup(true)}>
+            <button className="checkout-btn" disabled={selectedSeats.length === 0 || selectedDate === null || selectedTime === null} onClick={() => setShowPopup(true)}>
                 Proceed to Book ({selectedSeats.length} seats)
             </button>
             {

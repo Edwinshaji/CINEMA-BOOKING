@@ -72,6 +72,7 @@
     .accordion-panel.active {
         flex: none;
         height: 350px;
+        flex: 1.2;
     }
 
     .movies-grid {
@@ -87,8 +88,5 @@
         height: 100%;
         object-fit: contain;
         transition: transform 0.5s ease;
-    }
-    .accordion-panel.active {
-        flex: 1.2;
     }
 }

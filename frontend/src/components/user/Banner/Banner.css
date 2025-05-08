@@ -24,7 +24,7 @@
 /* Image tag inside */
 .carousel-image img {
     width: 100%;
-    height: 100%;
+    height: 35rem;
     object-fit: cover;
     border-radius: 12px;
     transition: all 1s ease-in-out;

@@ -10,7 +10,7 @@ const Movies = () => {
   useEffect(() => {
     axios.get('http://localhost:5000/api/user/getActiveMovies')
       .then((response) => {
-        setMovies(response.data)
+        setMovies(response.data.reverse())
       })
   }, [])
 
