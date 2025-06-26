@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react'
 import { useLocation } from 'react-router-dom'
 import '../listBookings/ListBookings.css';
 import axios from 'axios';
+import { backendurl } from '../../../App';
 
 const ListBookings = () => {
     const location = useLocation();
@@ -17,7 +18,7 @@ const ListBookings = () => {
     useEffect(() => {
         if (showId !== null) {
 
-            axios.get('http://localhost:5000/api/admin/getBookingsShow/' + showId)
+            axios.get(`${backendurl}/api/admin/getBookingsShow/` + showId)
                 .then((response) => {
                     setBookings(response.data)
                 })

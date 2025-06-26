@@ -15,6 +15,7 @@ import { expiresBookings } from './jobs/expires-booking.js';
 const app = express();
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
+const PORT = process.env.PORT || 5000;
 dotenv.config()
 
 app.use(cors({
@@ -35,7 +36,7 @@ cron.schedule('* * * * *',()=>{
     expiresBookings();
 })
 
-app.listen(5000, () => {
+app.listen(PORT, () => {
     connectDB();
     console.log("Server Started at PORT 5000");
 })

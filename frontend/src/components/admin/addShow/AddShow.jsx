@@ -5,6 +5,7 @@ import 'react-datepicker/dist/react-datepicker.css';
 import '../addShow/AddShow.css';
 import axios from 'axios';
 import { toast } from 'react-toastify';
+import { backendurl } from '../../../App';
 
 const AddShow = () => {
     const [movies, setMovies] = useState([]);
@@ -14,7 +15,7 @@ const AddShow = () => {
     const [showTimes, setShowTimes] = useState([]);
 
     useEffect(() => {
-        axios.get('http://localhost:5000/api/admin/getAllMovies')
+        axios.get(`${backendurl}/api/admin/getAllMovies`)
             .then((response) => {
                 const options = response.data.map(movie => ({
                     value: movie._id,
@@ -66,7 +67,7 @@ const AddShow = () => {
             times: showTimes,
         };
 
-        await axios.post('http://localhost:5000/api/admin/addShows', data)
+        await axios.post(`${backendurl}/api/admin/addShows`, data)
             .then((response) => {
                 toast.success(response.data.message);
                 setSelectedMovie(null);

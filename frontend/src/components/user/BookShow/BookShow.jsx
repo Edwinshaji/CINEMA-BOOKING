@@ -6,6 +6,7 @@ import { UserContext } from "../../../../context/userContext";
 import CheckoutPopup from "../CheckOut/CheckoutPopup";
 import ProtectedRoute from "../../../routes/ProtectedRoute";
 import { toast } from "react-toastify";
+import { backendurl } from "../../../App";
 
 
 const BookShow = () => {
@@ -42,7 +43,7 @@ const BookShow = () => {
 
     // after selecting the seats when we press checkout button this function is called
     const handleCheckOut = async () => {
-        await axios.post('http://localhost:5000/api/user/bookTicket', { userId: user._id, movieId: movieId, showId: selectedShow._id, selectedSeats: selectedSeats, totalAmount: totalAmount }, { withCredentials: true })
+        await axios.post(`${backendurl}/api/user/bookTicket`, { userId: user._id, movieId: movieId, showId: selectedShow._id, selectedSeats: selectedSeats, totalAmount: totalAmount }, { withCredentials: true })
             .then((response) => {
                 toast.success(response.data.message)
                 setShowPopup(false)
@@ -63,7 +64,7 @@ const BookShow = () => {
     useEffect(() => {
         if (!movieId) return;
         // get all shows    
-        axios.get('http://localhost:5000/api/user/getShowsSingleMovie/' + movieId)
+        axios.get(`${backendurl}/api/user/getShowsSingleMovie/` + movieId)
             .then((response) => {
                 setShows(response.data)
             })
@@ -71,7 +72,7 @@ const BookShow = () => {
                 console.log(err)
             })
         // get details of that movie
-        axios.get('http://localhost:5000/api/user/getSingleMovie/' + movieId)
+        axios.get(`${backendurl}/api/user/getSingleMovie/` + movieId)
             .then((response) => {
                 setMovie(response.data)
             })

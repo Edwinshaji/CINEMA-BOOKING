@@ -3,6 +3,7 @@ import './AddMovie.css';
 import axios from 'axios';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
+import { backendurl } from '../../../App';
 
 const AddMovie = () => {
   const navigate = useNavigate();
@@ -36,14 +37,14 @@ const AddMovie = () => {
     data.append('poster_image', formData.poster_image);
 
     if (location.state != null) {
-      axios.put('http://localhost:5000/api/admin/editMovie/' + location.state.values._id, data)
+      axios.put(`${backendurl}/api/admin/editMovie/` + location.state.values._id, data)
         .then((response) => {
           toast.success(response.data.message)
           navigate('/admin/movies')
         })
     } else {
 
-      axios.post('http://localhost:5000/api/admin/addMovie', data)
+      axios.post(`${backendurl}/api/admin/addMovie`, data)
         .then((response) => {
           toast.success(response.data.message)
           navigate('/admin/movies')
@@ -86,7 +87,7 @@ const AddMovie = () => {
 
         <label>Upload Poster</label><br />
         {formData.poster_image != null && (
-          <img className='poster-image' src={`http://localhost:5000/poster-images/${formData.poster_image}`} alt="poster image" />
+          <img className='poster-image' src={`${backendurl}/poster-images/${formData.poster_image}`} alt="poster image" />
         )}
         <input type="file" name="poster_image" accept="image/*" required onChange={handleChange} />
 

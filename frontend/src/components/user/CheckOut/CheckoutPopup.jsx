@@ -2,6 +2,7 @@ import React, { useContext } from 'react';
 import './CheckoutPopup.css';
 import { UserContext } from '../../../../context/userContext';
 import { toast } from 'react-toastify';
+import { backendurl } from '../../../App';
 
 const CheckoutPopup = ({ movie, selectedDate, selectedTime, selectedSeats, totalAmount, onClose,onBookingComplete}) => {
 
@@ -33,7 +34,7 @@ const CheckoutPopup = ({ movie, selectedDate, selectedTime, selectedSeats, total
             currency: "INR",
             name: movie.title,
             description: "Movie Ticket Booking",
-            image: `http://localhost:5000/poster-images/${movie.posterUrl}`,
+            image: `${backendurl}/poster-images/${movie.posterUrl}`,
             handler: function (response) {
                 toast.success("Payment Successful!")
                 onBookingComplete()
@@ -58,7 +59,7 @@ const CheckoutPopup = ({ movie, selectedDate, selectedTime, selectedSeats, total
             <div className="popup">
                 <button className="close-btn" onClick={onClose}>×</button>
                 <div className="popup-content">
-                    <img src={`http://localhost:5000/poster-images/${movie.posterUrl}`} alt={movie.title} className="movie-poster" />
+                    <img src={`${backendurl}/poster-images/${movie.posterUrl}`} alt={movie.title} className="movie-poster" />
                     <h2>{movie.title}</h2>
                     <p><strong>Date:</strong> {selectedDate}</p>
                     <p><strong>Time:</strong> {selectedTime}</p>

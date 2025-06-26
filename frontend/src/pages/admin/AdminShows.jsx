@@ -3,6 +3,7 @@ import './css/AdminShows.css'; // styling below
 import { Link, useLocation } from 'react-router-dom';
 import axios from 'axios';
 import { toast } from 'react-toastify';
+import { backendurl } from '../../App';
 
 
 const AdminShows = () => {
@@ -12,14 +13,14 @@ const AdminShows = () => {
   const [expandedMovieId, setExpandedMovieId] = useState(null);
 
   useEffect(() => {
-    axios.get('http://localhost:5000/api/admin/getActiveMovies')
+    axios.get(`${backendurl}/api/admin/getActiveMovies`)
       .then((response) => {
         setMovies(response.data)
       })
   }, []);
 
   const toggleMovie = async (movieId) => {
-    await axios.get('http://localhost:5000/api/admin/getShowsSingleMovie/' + movieId)
+    await axios.get(`${backendurl}/api/admin/getShowsSingleMovie/` + movieId)
       .then((response) => {
         setShows(response.data)
       })
@@ -30,7 +31,7 @@ const AdminShows = () => {
   };
 
   const handleDelete = async (showId) => {
-    await axios.delete('http://localhost:5000/api/admin/deleteShow/' + showId)
+    await axios.delete(`${backendurl}/api/admin/deleteShow/` + showId)
       .then((response) => {
         toast.success(response.data.message)
       })

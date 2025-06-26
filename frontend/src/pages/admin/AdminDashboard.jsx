@@ -3,6 +3,7 @@ import axios from 'axios';
 import { useNavigate } from 'react-router-dom'
 import { UserContext } from '../../../context/userContext'
 import './css/AdminDashboard.css'
+import { backendurl } from '../../App';
 
 function AdminDashboard() {
   const { setUser } = useContext(UserContext);
@@ -34,19 +35,19 @@ function AdminDashboard() {
       setDateTime(new Date());
     }, 1000);
 
-    axios.get('http://localhost:5000/api/admin/getActiveMovies')
+    axios.get(`${backendurl}/api/admin/getActiveMovies`)
       .then((response) => {
         setRunningMovies(response.data.length)
       })
-    axios.post('http://localhost:5000/api/admin/getShowsByDate', { date: new Date().toISOString().split('T')[0] })
+    axios.post(`${backendurl}/api/admin/getShowsByDate`, { date: new Date().toISOString().split('T')[0] })
       .then((response) => {
         setTodaysShows(response.data.length)
       })
-    axios.get('http://localhost:5000/api/admin/getTodaysBookingCount')
+    axios.get(`${backendurl}/api/admin/getTodaysBookingCount`)
       .then((response) => {
         setTicketsSold(response.data)
       })
-    axios.get('http://localhost:5000/api/admin/getTotalUsers')
+    axios.get(`${backendurl}/api/admin/getTotalUsers`)
     .then((response)=>{
       setTotalUsers(response.data)
     })
@@ -55,7 +56,7 @@ function AdminDashboard() {
   }, []);
 
   const handleLogout = async () => {
-    await axios.get('http://localhost:5000/api/user/logout', { withCredentials: true })
+    await axios.get(`${backendurl}/api/user/logout`, { withCredentials: true })
       .then((response) => {
         setUser(null)
         navigate('/')

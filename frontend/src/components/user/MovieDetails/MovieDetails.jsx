@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import "./MovieDetails.css";
 import { useLocation, useNavigate } from "react-router-dom";
 import axios from "axios";
+import { backendurl } from "../../../App";
 
 const MovieDetails = () => {
   const navigate = useNavigate();
@@ -17,7 +18,7 @@ const MovieDetails = () => {
   },[location.state])
 
   useEffect(()=>{
-    axios.get('http://localhost:5000/api/user/getSingleMovie/'+movieId)
+    axios.get(`${backendurl}/api/user/getSingleMovie/`+movieId)
     .then((response)=>{
       setMovie(response.data);
     })
@@ -29,7 +30,7 @@ const MovieDetails = () => {
   return (
     <div className="movie-details-page">
       <div className="poster">
-        <img src={`http://localhost:5000/poster-images/${movie.posterUrl}`} alt={movie.title} />
+        <img src={`${backendurl}/poster-images/${movie.posterUrl}`} alt={movie.title} />
       </div>
 
       <div className="details">

@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { Html5QrcodeScanner } from 'html5-qrcode';
 import './TicketScanner.css'
+import { backendurl } from '../../../App';
+
 const TicketScanner = () => {
   const [scanResult, setScanResult] = useState('');
   const [errorMessage, setErrorMessage] = useState('');
@@ -34,7 +36,7 @@ const TicketScanner = () => {
 
   const expireBooking = async (bookingId) => {
     try {
-      const res = await fetch(`http://localhost:5000/api/admin/expireBooking/${bookingId}`, {
+      const res = await fetch(`${backendurl}/api/admin/expireBooking/${bookingId}`, {
         method: 'PUT',
       });
 

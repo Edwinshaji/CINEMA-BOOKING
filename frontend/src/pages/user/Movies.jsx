@@ -2,13 +2,14 @@ import React, { useEffect, useState } from "react";
 import "./css/Movies.css";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import { backendurl } from "../../App";
 
 const Movies = () => {
   const navigate = useNavigate();
   const [movies, setMovies] = useState([]);
 
   useEffect(() => {
-    axios.get('http://localhost:5000/api/user/getActiveMovies')
+    axios.get(`${backendurl}/api/user/getActiveMovies`)
       .then((response) => {
         setMovies(response.data.reverse())
       })
@@ -31,7 +32,7 @@ const Movies = () => {
       <div className="movies-grid">
         {movies.map((movie,id) => (
           <div className="movie-card" key={id}>
-            <img src={`http://localhost:5000/poster-images/${movie.posterUrl}`} alt={movie.title} />
+            <img src={`${backendurl}/poster-images/${movie.posterUrl}`} alt={movie.title} />
             <h2>{movie.title}</h2>
             <p>Language: {movie.language}</p>
             <button className="view-movie-btn" onClick={(() => { handleViewMovie(movie._id) })}>View Movie</button>

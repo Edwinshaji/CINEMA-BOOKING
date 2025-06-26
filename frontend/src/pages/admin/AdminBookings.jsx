@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import './css/AdminBookings.css'; // styling below
 import { Link, Navigate, useLocation, useNavigate } from 'react-router-dom';
 import axios from 'axios';
+import { backendurl } from '../../App';
 
 
 const AdminBookings = () => {
@@ -12,14 +13,14 @@ const AdminBookings = () => {
   const [expandedMovieId, setExpandedMovieId] = useState(null);
 
   useEffect(() => {
-    axios.get('http://localhost:5000/api/admin/getActiveMovies')
+    axios.get(`${backendurl}/api/admin/getActiveMovies`)
       .then((response) => {
         setMovies(response.data)
       })
   }, []);
 
   const toggleMovie = async (movieId) => {
-    await axios.get('http://localhost:5000/api/admin/getShowsSingleMovie/' + movieId)
+    await axios.get(`${backendurl}/api/admin/getShowsSingleMovie/` + movieId)
       .then((response) => {
         setShows(response.data)
       })

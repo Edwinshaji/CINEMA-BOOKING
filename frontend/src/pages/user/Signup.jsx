@@ -3,6 +3,7 @@ import { useNavigate, Link } from 'react-router-dom';
 import axios from 'axios';
 import './css/Signup.css';
 import { toast } from 'react-toastify';
+import { backendurl } from '../../App';
 
 function Signup() {
   const [name, setName] = useState('');
@@ -13,7 +14,7 @@ function Signup() {
 
   const handleSignup = async (e) => {
     e.preventDefault();
-    axios.post('http://localhost:5000/api/user/signup', { name, email, password })
+    axios.post(`${backendurl}/api/user/signup`, { name, email, password })
       .then((response) => {
         navigate('/login')
       })

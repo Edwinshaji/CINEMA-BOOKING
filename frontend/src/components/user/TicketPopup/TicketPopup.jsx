@@ -1,6 +1,7 @@
 import React from 'react';
 import './TicketPopup.css';
 import logo from '../../../assets/logo.png'
+import { backendurl } from '../../../App';
 
 const TicketPopup = ({ poster, movie, date, time, seats, status, totalAmount, QRCodeImg, onClose }) => {
     return (
@@ -11,7 +12,7 @@ const TicketPopup = ({ poster, movie, date, time, seats, status, totalAmount, QR
                 </button>
 
                 <img
-                    src={`http://localhost:5000/poster-images/${poster}`}
+                    src={`${backendurl}/poster-images/${poster}`}
                     alt={movie}
                     className="ticket-poster"
                 />

@@ -3,13 +3,14 @@ import './css/AdminMovies.css'
 import { Link, useNavigate } from 'react-router-dom'
 import axios from 'axios';
 import { toast } from 'react-toastify';
+import { backendurl } from '../../App';
 
 function AdminMovies() {
   const navigate = useNavigate();
   const [movies, setMovies] = useState([]);
 
   useEffect(() => {
-    axios.get('http://localhost:5000/api/admin/getAllMovies')
+    axios.get(`${backendurl}/api/admin/getAllMovies`)
       .then((response) => {
         setMovies(response.data)
       })
@@ -23,7 +24,7 @@ function AdminMovies() {
   }
 
   const removeHandler = async (id) => {
-    await axios.get('http://localhost:5000/api/admin/deactivateMovie/' + id)
+    await axios.get(`${backendurl}/api/admin/deactivateMovie/` + id)
       .then((response) => {
         toast.success(response.data.message)
       })
@@ -37,7 +38,7 @@ function AdminMovies() {
   }
 
   const liveHandler = async (id) => {
-    await axios.get('http://localhost:5000/api/admin/activateMovie/' + id)
+    await axios.get(`${backendurl}/api/admin/activateMovie/` + id)
       .then((response) => {
         toast.success(response.data.message)
       })
@@ -51,7 +52,7 @@ function AdminMovies() {
   }
 
   const deleteHandler = async (id) => {
-    await axios.delete('http://localhost:5000/api/admin/deleteMovie/' + id)
+    await axios.delete(`${backendurl}/api/admin/deleteMovie/` + id)
       .then((response) => {
         toast.success(response.data.message)
         window.location.reload();

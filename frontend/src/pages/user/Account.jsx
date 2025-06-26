@@ -7,6 +7,7 @@ import { useLocation, useNavigate } from 'react-router-dom';
 import EditProfile from '../../components/user/EditProfile/EditProfile';
 import ChangePassword from '../../components/user/ChangePassword/ChangePassword';
 import avatar from '../../assets/avatar.jpg'
+import { backendurl } from '../../App';
 
 const Account = () => {
   const navigate = useNavigate();
@@ -16,7 +17,7 @@ const Account = () => {
   const [changePassPopup, setChangePassPopup] = useState(false);
 
   const handleEditProfile = async (newName) => {
-    await axios.put('http://localhost:5000/api/user/editProfile/' + user._id, { newName })
+    await axios.put(`${backendurl}/api/user/editProfile/` + user._id, { newName })
       .then((response) => {
         toast.success(response.data.message);
       })
@@ -26,7 +27,7 @@ const Account = () => {
   };
 
   const handleChangePassword = async (oldPassword, newPassword) => {
-    await axios.put(`http://localhost:5000/api/user/changePassword/${user._id}`, { oldPassword, newPassword })
+    await axios.put(`${backendurl}/api/user/changePassword/${user._id}`, { oldPassword, newPassword })
       .then((response) => {
         toast.success(response.data.message);
       })
@@ -36,7 +37,7 @@ const Account = () => {
   };
 
   const handleLogout = async () => {
-    await axios.get('http://localhost:5000/api/user/logout', { withCredentials: true })
+    await axios.get(`${backendurl}/api/user/logout`, { withCredentials: true })
       .then(() => {
         navigate('/')
         window.location.reload();

@@ -4,6 +4,7 @@ import axios from 'axios';
 import './css/Login.css';
 import { UserContext } from '../../../context/userContext';
 import { toast } from 'react-toastify';
+import { backendurl } from '../../App';
 
 function Login() {
     const navigate = useNavigate();
@@ -14,7 +15,7 @@ function Login() {
     const handleLogin = async (e) => {
         e.preventDefault();
         //console.log('Logging in with:', { email, password });
-        await axios.post('http://localhost:5000/api/user/login', { email, password }, { withCredentials: true })
+        await axios.post(`${backendurl}/api/user/login`, { email, password }, { withCredentials: true })
             .then((response) => {
                 setUser(response.data.user)
                 if (response.data.user.role === "admin") {

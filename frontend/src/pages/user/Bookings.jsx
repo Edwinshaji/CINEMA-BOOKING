@@ -5,6 +5,7 @@ import { UserContext } from "../../../context/userContext";
 import TicketPopup from "../../components/user/TicketPopup/TicketPopup";
 import { toast } from "react-toastify";
 import QRCode from 'qrcode';
+import { backendurl } from "../../App";
 
 const Bookings = () => {
   const { user } = useContext(UserContext);
@@ -19,7 +20,7 @@ const Bookings = () => {
     const fetchBookings = async () => {
       try {
         const res = await axios.get(
-          `http://localhost:5000/api/user/getTickets/${user._id}`
+          `${backendurl}/api/user/getTickets/${user._id}`
         );
 
         const bookings = res.data;
@@ -64,7 +65,7 @@ const Bookings = () => {
     e.stopPropagation();
     const bookingId = booking._id;
     try {
-      const response = await axios.put(`http://localhost:5000/api/user/cancelTicket/${user._id}/${bookingId}`, { booking });
+      const response = await axios.put(`${backendurl}/api/user/cancelTicket/${user._id}/${bookingId}`, { booking });
       toast.success(response.data.message);
 
       setTimeout(() => {

@@ -2,6 +2,7 @@ import axios from 'axios';
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import './MovieAccordation.css'
+import { backendurl } from '../../../App';
 
 function MovieAccordation() {
     const navigate = useNavigate();
@@ -18,7 +19,7 @@ function MovieAccordation() {
     }
 
     useEffect(() => {
-        axios.get('http://localhost:5000/api/user/getLatestMovies')
+        axios.get(`${backendurl}/api/user/getLatestMovies`)
             .then((response) => {
                 setLatestMovies(response.data)
             })
@@ -36,7 +37,7 @@ function MovieAccordation() {
                         onMouseLeave={() => setActiveIndex(null)}
                         onClick={() => { handleMovieClick(movie._id) }}
                     >
-                        <img src={`http://localhost:5000/poster-images/${movie.posterUrl}`} alt={movie.title} />
+                        <img src={`${backendurl}/poster-images/${movie.posterUrl}`} alt={movie.title} />
                         <div className="accordion-content">
                             <h3>{movie.title}</h3>
 
