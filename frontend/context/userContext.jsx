@@ -1,5 +1,7 @@
 import { createContext, useState, useEffect } from "react";
 import axios from "axios";
+import {backendurl} from '../src/App'
+
 
 export const UserContext = createContext()
 
@@ -9,7 +11,7 @@ export const UserContextProvider = ({ children }) => {
 
     useEffect(() => {
         const fetchusers= async()=>{
-            await axios.get('http://localhost:5000/api/user/getUser', { withCredentials: true })
+            await axios.get(`${backendurl}/api/user/getUser`, { withCredentials: true })
                 .then(res => {
                     setUser(res.data.user);
                     setLoading(false);
