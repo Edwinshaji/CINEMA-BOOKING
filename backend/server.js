@@ -19,7 +19,7 @@ const PORT = process.env.PORT || 5000;
 dotenv.config()
 
 app.use(cors({
-    origin: 'http://localhost:5173',
+    origin: 'https://cinego-m8y6.onrender.com' || 'http://localhost:5173',
     credentials: true
 }));
 
