@@ -30,7 +30,7 @@ import BookShow from './components/user/BookShow/BookShow'
 import Footer from './components/user/Footer/Footer'
 import TicketScanner from './components/admin/ticketScanner/TicketScanner'
 
-export const backendurl = 'http://localhost:5000';
+export const backendurl = 'https://cinego-backend-5zm3.onrender.com';
 
 function App() {
   const location = useLocation();
